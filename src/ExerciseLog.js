@@ -5,12 +5,7 @@ const ExerciseLog = () => {
     const [exercises, setExercises] = useState(defaultExercises)
     const [newExercise, setNewExercise] = useState("")
     const [newMuscleGroup, setNewMuscleGroup] = useState("")
-    const [selectedExercise, setSelectedExercise] = useState("")
-    const [weight, setWeight] = useState("")
-    const [reps, setReps] = useState("")
-    const [log, setLog] = useState([])
-
-    const [showMuscleGroup, setShowMuscleGroup] = useState(false)
+    const [showMuscleGroup, setShowMuscleGroup] = useState(true)
     const [isEditing, setIsEditing] = useState(false);
     const [editIndex, setEditIndex] = useState(null);
     const [editExerciseName, setEditExerciseName] = useState("");
@@ -24,6 +19,9 @@ const ExerciseLog = () => {
         defaultMuscleGroups.push("Add a new muscle group")
         return defaultMuscleGroups
     })
+
+    const [searchTerm, setSearchTerm] = useState("")
+    const [selectedMuscleGroup, setSelectedMuscleGroup] = useState("All")
 
     const addExercise = () => {
         if(newExercise.trim() && newMuscleGroup.trim()) {
@@ -81,6 +79,26 @@ const ExerciseLog = () => {
         }
     }
 
+    const filteredMuscleGroups = muscleGroups.filter((group) => (
+        group.toLowerCase().includes(searchTerm.toLowerCase()) && group !== "Add a new muscle group"
+    ))
+
+    const filteredExercises = exercises.filter((exercise) => {
+        if(selectedMuscleGroup === "All" && searchTerm.trim() === "") return true
+        if(selectedMuscleGroup !== "All") return exercise.muscleGroup === selectedMuscleGroup
+        return exercise.muscleGroup.toLowerCase().includes(searchTerm.toLowerCase())
+    })
+
+    const handleSearchChange = ((e) => {
+        setSearchTerm(e.target.value)
+        setSelectedMuscleGroup("All")
+    })
+
+    const handleMuscleGroupSelect = ((group) => {
+        setSelectedMuscleGroup(group)
+        setSearchTerm(group)
+    })
+
     const toggleMuscleGroup = () => {
         setShowMuscleGroup(!showMuscleGroup)
         setIsEditing(false)
@@ -90,14 +108,6 @@ const ExerciseLog = () => {
         setIsEditing(!isEditing)
         setShowMuscleGroup(true)
     }
-    
-    const logWorkout = () => {
-        if(selectedExercise && weight && reps) {
-            setLog([...log, {exercise: selectedExercise, weight, reps}])
-            setWeight("")
-            setReps("")
-        }
-    }
 
     return (
         <div>
@@ -105,8 +115,18 @@ const ExerciseLog = () => {
             <input type="text" value={newExercise} onChange={(e) => setNewExercise(e.target.value)} placeholder="Enter exercise name"/>
             <input type="text" value={newMuscleGroup} onChange={(e) => setNewMuscleGroup(e.target.value)} placeholder="Enter muscle group name"/>
             <button onClick={addExercise}>Add</button>
-            <button onClick={toggleMuscleGroup}>Show muscle group</button>
+            <button onClick={toggleMuscleGroup}>{showMuscleGroup ? "Hide muscle group" : "Show muscle group"}</button>
             <h2>Exercise list</h2>
+            <input type="text" value={searchTerm} onChange={handleSearchChange} placeholder="Enter a muscle group name"/>
+            {searchTerm && (
+            <ul style={{listStyleType: "none", padding: 0}}>
+                {filteredMuscleGroups.map((group, index) => (
+                    <li key={index} onClick={() => handleMuscleGroupSelect(group)} style={{cursor: "pointer", padding: "1px", border: "1px solid #ddd"}}>
+                        {group}
+                    </li>
+                ))}
+            </ul>
+            )}
             <button onClick={toggleEditing}>{isEditing ? "Disable edit mode" : "Enable edit mode"}</button>
             <table>
                 <thead>
@@ -117,7 +137,7 @@ const ExerciseLog = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {exercises.map((exercise, index) => (
+                    {filteredExercises.map((exercise, index) => (
                         <tr key={index}>
                             {editIndex === index ? (
                                 <>
@@ -159,31 +179,31 @@ const ExerciseLog = () => {
             </table>
             {isEditing && (
             <>
-            <h2>Delete muscle groups</h2> 
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            Muscle Group
-                        </th>
-                        <th>
-                            Action
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {muscleGroups.filter((group) => group !== "Add a new muscle group").map((group, index) => (
-                        <tr key={index}>
-                            <td>
-                                {group}
-                            </td>
-                            <td>
-                                <button onClick={() => deleteMuscleGroup(group)}>Delete</button>
-                            </td>
+                <h2>Delete muscle groups</h2> 
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                Muscle Group
+                            </th>
+                            <th>
+                                Action
+                            </th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {muscleGroups.filter((group) => group !== "Add a new muscle group").map((group, index) => (
+                            <tr key={index}>
+                                <td>
+                                    {group}
+                                </td>
+                                <td>
+                                    <button onClick={() => deleteMuscleGroup(group)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </>
             )}
         </div>
