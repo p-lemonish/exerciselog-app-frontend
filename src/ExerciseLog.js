@@ -10,7 +10,24 @@ const ExerciseLog = () => {
     const [log, setLog] = useState([])
 
     const addExercise = () => {
-        setExercises([...exercises, newExercise])
-
+        if(newExercise.trim()) {
+            setExercises([...exercises, newExercise])
+            setNewExercise("")
+        }
     }
+
+    return (
+        <div>
+            <h2>Add exercise</h2>
+            <input type="text" value={newExercise} onChange={(e) => setNewExercise(e.target.value)} placeholder="Enter exercise name"/>
+            <button onClick={addExercise}>Add</button>
+            <h2>Exercise list</h2>
+            <div>
+                {exercises.map((exercise, index) => (
+                    <p key={index}>{exercise}</p>
+                ))}
+            </div>
+        </div>
+    )
 }
+export default ExerciseLog
