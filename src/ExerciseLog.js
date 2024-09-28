@@ -1,3 +1,52 @@
+/**
+ * ExerciseLog Component
+ * ---------------------
+ * This component handles the logging of exercises and their associated muscle groups. 
+ * Users can add new exercises, edit existing ones, and filter exercises by muscle group.
+ * 
+ * State Variables:
+ * ----------------
+ * exercises : Array
+ *    List of all exercises currently added to the log.
+ * newExercise : String
+ *    Name of the new exercise being entered by the user.
+ * newMuscleGroup : String
+ *    Name of the muscle group associated with the new exercise.
+ * showMuscleGroup : Boolean
+ *    Controls whether the muscle group column is displayed in the exercise table.
+ * isEditing : Boolean
+ *    Determines if the edit mode is enabled or disabled for exercises.
+ * editIndex : Number
+ *    The index of the exercise being edited.
+ * editExerciseName : String
+ *    The name of the exercise currently being edited.
+ * editMuscleGroup : String
+ *    The muscle group associated with the exercise being edited.
+ * isAddingNewMuscleGroup : Boolean
+ *    Tracks whether the user is adding a new muscle group.
+ * muscleGroups : Array
+ *    List of all available muscle groups, including default and user-added groups.
+ * searchTerm : String
+ *    The search term used to filter exercises by muscle group.
+ * selectedMuscleGroup : String
+ *    The muscle group currently selected from the search results or dropdown.
+ * 
+ * Methods:
+ * --------
+ * addExercise() : Adds a new exercise to the log, and if the muscle group is not in the list, 
+ *                 adds the new muscle group.
+ * deleteExercise(index: Number) : Deletes the exercise at the given index from the log.
+ * editExercise(index: Number) : Prepares the exercise at the given index for editing.
+ * saveExercise(index: Number) : Saves the edited exercise back into the list.
+ * handleMuscleGroupChange(e: Event) : Handles changes to the muscle group dropdown during editing.
+ * handleMuscleGroupSelect(group: String) : Handles selection of a muscle group from the search results.
+ * deleteMuscleGroup(group: String) : Deletes a muscle group from the list if it is not in use.
+ * handleSearchChange(e: Event) : Updates the search term used to filter muscle groups.
+ * toggleMuscleGroup() : Toggles the display of the muscle group column in the exercise table.
+ * toggleEditing() : Toggles edit mode for the exercises.
+ * 
+ */
+
 import React, {useState} from "react"
 import defaultExercises from "./defaultExercises.js"
 
