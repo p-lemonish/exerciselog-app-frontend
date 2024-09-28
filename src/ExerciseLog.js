@@ -27,6 +27,9 @@ const ExerciseLog = () => {
 
     const addExercise = () => {
         if(newExercise.trim() && newMuscleGroup.trim()) {
+            if (!muscleGroups.includes(newMuscleGroup)) {
+                setMuscleGroups([...muscleGroups.slice(0, -1), newMuscleGroup, "Add a new muscle group"])
+            }
             setExercises([...exercises, { name: newExercise, muscleGroup: newMuscleGroup }])
             setNewExercise("")
             setNewMuscleGroup("")
@@ -66,6 +69,15 @@ const ExerciseLog = () => {
         } else {
             setIsAddingNewMuscleGroup(false)
             setEditMuscleGroup(selectedValue)
+        }
+    }
+
+    const deleteMuscleGroup = (group) => {
+        const isMuscleGroupInUse = exercises.some((exercise) => exercise.muscleGroup === group)
+        if(!isMuscleGroupInUse) {
+            setMuscleGroups(muscleGroups.filter((g) => g !== group))
+        } else {
+            alert("Muscle group is in use!")
         }
     }
 
@@ -145,6 +157,35 @@ const ExerciseLog = () => {
                     ))}
                 </tbody>
             </table>
+            {isEditing && (
+            <>
+            <h2>Delete muscle groups</h2> 
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Muscle Group
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {muscleGroups.filter((group) => group !== "Add a new muscle group").map((group, index) => (
+                        <tr key={index}>
+                            <td>
+                                {group}
+                            </td>
+                            <td>
+                                <button onClick={() => deleteMuscleGroup(group)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            </>
+            )}
         </div>
     )
 }
