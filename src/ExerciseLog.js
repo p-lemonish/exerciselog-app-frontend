@@ -15,6 +15,15 @@ const ExerciseLog = () => {
     const [editIndex, setEditIndex] = useState(null);
     const [editExerciseName, setEditExerciseName] = useState("");
     const [editMuscleGroup, setEditMuscleGroup] = useState("");
+    const [isAddingNewMuscleGroup, setIsAddingNewMuscleGroup] = useState(false)
+
+    const [muscleGroups, setMuscleGroups] = useState(() => {
+        const defaultMuscleGroups = Array.from(
+            new Set(defaultExercises.map((exercise) => exercise.muscleGroup))
+        )
+        defaultMuscleGroups.push("Add a new muscle group")
+        return defaultMuscleGroups
+    })
 
     const addExercise = () => {
         if(newExercise.trim() && newMuscleGroup.trim()) {
@@ -35,6 +44,9 @@ const ExerciseLog = () => {
     }
 
     const saveExercise = (index) => {
+        if(isAddingNewMuscleGroup && editMuscleGroup && !muscleGroups.includes(editMuscleGroup)) {
+            setMuscleGroups([...muscleGroups.slice(0,-1), editMuscleGroup, "Add a new muscle group"])
+        }
         const updatedExercises = exercises.map((exercise, i) => {
             if (i === index) {
                 return { name: editExerciseName, muscleGroup: editMuscleGroup }
@@ -43,6 +55,18 @@ const ExerciseLog = () => {
         })
         setExercises(updatedExercises)
         setEditIndex(null)
+        setIsAddingNewMuscleGroup(false)
+    }
+
+    const handleMuscleGroupChange = (e) => {
+        const selectedValue = e.target.value
+        if(selectedValue === "Add a new muscle group") {
+            setIsAddingNewMuscleGroup(true)
+            setEditMuscleGroup("")
+        } else {
+            setIsAddingNewMuscleGroup(false)
+            setEditMuscleGroup(selectedValue)
+        }
     }
 
     const toggleMuscleGroup = () => {
@@ -88,11 +112,19 @@ const ExerciseLog = () => {
                                     <td>
                                         <input type="text" value={editExerciseName} onChange={(e) => setEditExerciseName(e.target.value)}/>
                                     </td>
-                                    {showMuscleGroup && (
-                                        <td>
-                                            <input type="text" value={editMuscleGroup} onChange={(e) => setEditMuscleGroup(e.target.value)}/>
-                                        </td>
-                                    )}
+                                    <td>
+                                        {isAddingNewMuscleGroup ? (
+                                            <input type="text" value={editMuscleGroup} onChange={(e) => setEditMuscleGroup(e.target.value)} placeholder="Enter new muscle group"/>
+                                        ) : (
+                                            <select value={editMuscleGroup} onChange={handleMuscleGroupChange}>
+                                                {muscleGroups.map((group, i) => (
+                                                    <option key={i} value={group}>
+                                                        {group}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
+                                    </td>
                                     <td>
                                         <button onClick={() => saveExercise(index)}>Save</button>
                                         <button onClick={() => setEditIndex(null)}>Cancel</button>
