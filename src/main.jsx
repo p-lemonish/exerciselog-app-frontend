@@ -1,10 +1,16 @@
-import { StrictMode } from 'react'
+import React from 'react'
 import { createRoot } from 'react-dom/client'
-import MyComponent from "./ExerciseLog"
+import App from "./App"
 import './index.css'
+import { AuthProvider } from './context/AuthContext'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <MyComponent />
-  </StrictMode>,
+const container = document.getElementById('root')
+const root = createRoot(container)
+
+root.render(
+  <React.StrictMode>
+    <AuthProvider>
+      <App/>
+    </AuthProvider>
+  </React.StrictMode>
 )
