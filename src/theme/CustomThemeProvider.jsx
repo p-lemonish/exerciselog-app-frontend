@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import ThemeProvider from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { lightTheme, darkTheme } from "./theme"
 import { useMediaQuery } from "@mui/material";
 
