@@ -1,12 +1,14 @@
-import React, { useContext, useEffect, useState, useSyncExternalStore } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 function PlannedExerciseList() {
     const [plannedExercises, setPlannedExercises] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState();
     const { authState, logout } = useContext(AuthContext)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchPlannedExercises = async () => {
@@ -17,7 +19,7 @@ function PlannedExerciseList() {
                 console.error('Error fetching planned exercises', err)
                 if(err.response && err.response.status === 401) {
                     logout()
-                    window.location.href = '/login'
+                    navigate('/login')
                 } else {
                     setError('Failed to load planned exercises')
                 }
@@ -37,7 +39,7 @@ function PlannedExerciseList() {
             <ul>
                 {plannedExercises.map((exercise) => (
                     <li key={exercise.id}>
-                        {exercise.exerciseName} - {exercise.muscleGroup}: {exercise.plannedSets} x {exercise.plannedReps} @ {exercise.plannedWeight}kg
+                        {exercise.exerciseName}: {exercise.plannedSets} x {exercise.plannedReps} @ {exercise.plannedWeight}kg
                     </li>
                 ))}
             </ul>
