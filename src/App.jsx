@@ -5,6 +5,7 @@ import PrivateRoute from './components/PrivateRoute'
 import Login from './components/Auth/Login'
 import Register from "./components/Auth/Register";
 import { AuthContext } from "./context/AuthContext";
+import AddPlannedExercise from "./components/PlannedExercises/AddPlannedExercise";
 
 function App() {
   const { authState } = useContext(AuthContext)
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/planned-exercises" element={ <PrivateRoute element={ <PlannedExerciseList/> } />} />
+        <Route path="/add-planned" element={ <PrivateRoute element={ <AddPlannedExercise/> } />} />
         <Route path="/" element={
           authState.isAuthenticated ? <Navigate to="/planned-exercises" replace /> : <Navigate to="/login" replace />
         } />
