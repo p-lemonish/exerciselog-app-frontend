@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { lightTheme, darkTheme } from "./theme"
 import { useMediaQuery } from "@mui/material";
 
@@ -11,6 +11,7 @@ function CustomThemeProvider({ children }) {
 
     return (
         <ThemeProvider theme={theme}>
+            <CssBaseline />
             {children}
         </ThemeProvider>
     )
