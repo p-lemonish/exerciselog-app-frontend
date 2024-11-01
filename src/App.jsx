@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import PlannedExerciseList from './components/PlannedExercises/PlannedExerciseList'
 import PrivateRoute from './components/PrivateRoute'
 import Login from './components/Auth/Login'
+import Register from "./components/Auth/Register";
 import { AuthContext } from "./context/AuthContext";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
         <Route path="/planned-exercises" element={ <PrivateRoute element={ <PlannedExerciseList/> } />} />
         <Route path="/" element={
           authState.isAuthenticated ? <Navigate to="/planned-exercises" replace /> : <Navigate to="/login" replace />
