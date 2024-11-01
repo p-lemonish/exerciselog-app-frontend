@@ -63,15 +63,25 @@ function AddPlannedExercise() {
                     value={exerciseName} 
                     onChange={onChange} 
                     type="exerciseName" 
+                    slotProps={{
+                        inputLabel: {
+                            shrink: true
+                        }
+                    }}
                     fullWidth 
                     required
                 />
                 <TextField 
-                    label="Muscle Group (optional if adding existing exercise)" 
+                    label="Muscle Group (optional if adding existing exercise name)" 
                     name="muscleGroup" 
                     value={muscleGroup} 
                     onChange={onChange} 
                     type="muscleGroup" 
+                    slotProps={{
+                        inputLabel: {
+                            shrink: true
+                        }
+                    }}
                     fullWidth 
                 />
                 <TextField 
@@ -79,7 +89,12 @@ function AddPlannedExercise() {
                     name="plannedSets" 
                     value={plannedSets} 
                     onChange={onChange} 
-                    type="plannedSets" 
+                    type="number" 
+                    slotProps={{
+                        inputLabel: {
+                            shrink: true
+                        }
+                    }}
                     fullWidth 
                     required
                 />
@@ -88,7 +103,12 @@ function AddPlannedExercise() {
                     name="plannedReps" 
                     value={plannedReps} 
                     onChange={onChange} 
-                    type="plannedReps" 
+                    type="number" 
+                    slotProps={{
+                        inputLabel: {
+                            shrink: true
+                        }
+                    }}
                     fullWidth 
                     required
                 />
@@ -97,7 +117,12 @@ function AddPlannedExercise() {
                     name="plannedWeight" 
                     value={plannedWeight} 
                     onChange={onChange} 
-                    type="plannedWeight" 
+                    type="number" 
+                    slotProps={{
+                        inputLabel: {
+                            shrink: true
+                        }
+                    }}
                     fullWidth 
                     required
                 />
@@ -107,6 +132,11 @@ function AddPlannedExercise() {
                     value={notes} 
                     onChange={onChange} 
                     type="notes" 
+                    slotProps={{
+                        inputLabel: {
+                            shrink: true
+                        }
+                    }}
                     fullWidth 
                 />
                 {error && (
