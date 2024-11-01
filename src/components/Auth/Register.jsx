@@ -35,8 +35,12 @@ function Register() {
             navigate('/login')
         } catch(err) {
             console.log('Registration error:', err)
-            if(err.response && err.response.data && err.response.data.error) {
-                setError(err.response.data.error)
+            if(err.response && err.response.data) {
+                const errorData = err.response.data
+                const errorMessages = Object.entries(errorData).map(
+                    ([field, message]) => `${message}`
+                )
+                setError(errorMessages)
             } else {
                 setError('An error occurred during registration')
             }
