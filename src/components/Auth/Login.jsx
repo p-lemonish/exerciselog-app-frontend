@@ -1,8 +1,10 @@
 import React, { useContext, useState }from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         username: '',
         password: ''
@@ -26,7 +28,7 @@ function Login() {
             )
             const token = response.data.jwt
             login(token)
-            window.location.href = '/planned-exercises'
+            navigate('/planned-exercises')
         } catch (err) {
             console.log('Login error: ', err)
             setError('Invalid username or password')
