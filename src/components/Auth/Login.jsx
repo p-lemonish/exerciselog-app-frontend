@@ -1,7 +1,8 @@
 import React, { useContext, useState }from "react";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Alert, Button, Container, TextField, Typography } from "@mui/material";
 
 function Login() {
     const navigate = useNavigate()
@@ -35,21 +36,42 @@ function Login() {
         }
     }
     return (
-        <div>
-            <h2>Login</h2>
+        <Container maxWidth="sm">
+            <Typography variant="h4" component="h1" gutterBottom>
+                Login
+            </Typography>
             <form onSubmit={onSubmit}>
-                <div>
-                    <label>Username:</label>
-                    <input name="username" value={username} onChange={onChange} required/>
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input name="password" value={password} onChange={onChange}type="password" required/>
-                </div>
-                {error && <div style={{color: 'red'}}>{error}</div>}
-                <button type="submit">Login</button>
+                <TextField
+                    label="Username" 
+                    name="username" 
+                    value={username} 
+                    onChange={onChange} 
+                    type="username" 
+                    fullWidth 
+                    required
+                />
+                <TextField 
+                    label="Password" 
+                    name="password" 
+                    value={password} 
+                    onChange={onChange} 
+                    type="password" 
+                    fullWidth 
+                    required
+                />
+                {error && (
+                    <Alert severity="error">
+                        {error}
+                    </Alert>
+                )}
+                <Button type="submit" color="primary" fullWidth>
+                    Login
+                </Button>
             </form>
-        </div>
+            <Typography variant="body2">
+                Don&apos;t have an account? <Link to="/register">Register here.</Link>
+            </Typography>
+        </Container>
     )
 }
 

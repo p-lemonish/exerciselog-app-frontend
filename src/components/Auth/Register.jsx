@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { Alert, Button, Container, TextField, Typography } from "@mui/material";
 
 function Register() {
     const [formData, setFormData] = useState({
@@ -48,32 +49,60 @@ function Register() {
     }
 
     return (
-        <div>
-            <h2>Register</h2>
-                <form onSubmit={onSubmit}>
-                    <div>
-                        <label>Username:</label>
-                        <input name="username" value={username} onChange={onChange} required />
-                    </div>
-                    <div>
-                        <label>Email:</label>
-                        <input name="email" value={email} onChange={onChange} type="email" required />
-                    </div>
-                    <div>
-                        <label>Password:</label>
-                        <input name="password" value={password} onChange={onChange} type="password" required />
-                    </div>
-                    <div>
-                        <label>Confirm Password:</label>
-                        <input name="confirmPassword" value={confirmPassword} onChange={onChange} type="password" required />
-                    </div>
-                    {error && <div style={{ color: 'red' }}>{error}</div>}
-                    <button type="submit">Register</button>
-                </form>
-            <p>
+        <Container maxWidth="sm">
+            <Typography variant="h4" component="h1" gutterBottom>
+                Register
+            </Typography>
+            <form onSubmit={onSubmit}>
+                <TextField 
+                    label="Username" 
+                    name="username" 
+                    value={username} 
+                    onChange={onChange} 
+                    type="username" 
+                    fullWidth 
+                    required
+                />
+                <TextField 
+                    label="Email" 
+                    name="email" 
+                    value={email} 
+                    onChange={onChange} 
+                    type="email" 
+                    fullWidth 
+                    required
+                />
+                <TextField 
+                    label="Password" 
+                    name="password" 
+                    value={password} 
+                    onChange={onChange} 
+                    type="password" 
+                    fullWidth 
+                    required
+                />
+                <TextField 
+                    label="Confirm Password" 
+                    name="confirmPassword" 
+                    value={confirmPassword} 
+                    onChange={onChange} 
+                    type="password" 
+                    fullWidth 
+                    required
+                />
+                {error && (
+                    <Alert severity="error">
+                        {error}
+                    </Alert>
+                )}
+                <Button type="submit" color="primary" fullWidth>
+                    Register
+                </Button>
+            </form>
+            <Typography variant="body2">
                 Already have an account? <Link to="/login">Login here.</Link>
-            </p>
-        </div>
+            </Typography>
+        </Container>
     )
 }
 
