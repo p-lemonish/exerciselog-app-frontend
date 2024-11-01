@@ -95,7 +95,7 @@ function PlannedExerciseList() {
                     ))}
                 </List>
             )}
-            <Box sx={{ height: "80px" }} />
+            <Box sx={{ height: "80px" /* fix for navbar getting no padding */ }} />
         </Container>
     )
 }
