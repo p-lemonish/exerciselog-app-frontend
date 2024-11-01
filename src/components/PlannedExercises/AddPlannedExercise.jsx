@@ -102,7 +102,7 @@ function AddPlannedExercise() {
                     required
                 />
                 <TextField 
-                    label="Notes" 
+                    label="Notes (optional)" 
                     name="notes" 
                     value={notes} 
                     onChange={onChange} 
@@ -114,11 +114,11 @@ function AddPlannedExercise() {
                         {error}
                     </Alert>
                 )}
-                <Button type="submit" color="primary" fullWidth>
+                <Button type="submit" color="primary" variant="outlined" fullWidth>
                     Save
                 </Button>
             </form>
-            <Button type="cancel" color="primary" onClick={handleCancel} fullWidth>
+            <Button type="cancel" color="primary" variant="outlined" onClick={handleCancel} fullWidth>
                 Cancel
             </Button>
         </Container>

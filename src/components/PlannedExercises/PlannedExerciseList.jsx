@@ -50,7 +50,7 @@ function PlannedExerciseList() {
                         </li>
                     ))}
                 </ul>
-            <Button type="submit" color="primary" fullWidth onClick={handleClick}>
+            <Button type="submit" color="primary" variant="outlined" fullWidth onClick={handleClick}>
                 Add New Exercise
             </Button>
         </Container>
