@@ -7,7 +7,7 @@ import Register from "./components/Auth/Register";
 import { AuthContext } from "./context/AuthContext";
 import AddPlannedExercise from "./components/PlannedExercises/AddPlannedExercise";
 import Workouts from "./components/Workouts/Workouts"
-//import AddWorkout from "./components/Workouts/AddWorkout"
+import AddWorkout from "./components/Workouts/AddWorkout"
 import ExerciseLogs from "./components/ExerciseLogs/ExerciseLogs"
 import Profile from "./components/Profile/Profile"
 import BottomNavBar from "./components/Layout/BottomNavBar";
@@ -23,7 +23,7 @@ function App() {
         <Route path="/planned-exercises" element={ <PrivateRoute element={ <PlannedExerciseList/> } />} />
         <Route path="/add-planned" element={ <PrivateRoute element={ <AddPlannedExercise/> } />} />
         <Route path="/workouts" element={ <PrivateRoute element={ <Workouts/> } />} />
-        {/*<Route path="/add-workout" element={ <PrivateRoute element={ <AddWorkout/> } />} />*/}
+        <Route path="/add-workout" element={ <PrivateRoute element={ <AddWorkout/> } />} />
         <Route path="/exercise-logs" element={ <PrivateRoute element={ <ExerciseLogs/> } />} />
         <Route path="/profile" element={ <PrivateRoute element={ <Profile/> } />} />
         <Route path="/" element={
