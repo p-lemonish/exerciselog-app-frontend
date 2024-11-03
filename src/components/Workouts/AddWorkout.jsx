@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api"
 import { Box, CircularProgress, List, Alert, Button, Container, TextField, Typography, ListItem, Checkbox, ListItemText, Divider, Autocomplete } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext"
 
 function AddWorkout() {
+    const { id } = useParams()
+    const isEditMode = Boolean(id)
     const [formData, setFormData] = useState({
         workoutName: "",
         selectedExerciseIds: [],
@@ -29,20 +31,29 @@ function AddWorkout() {
     const onSubmit = async (e) => {
         e.preventDefault()
         try {
-            await api.post("/workouts", {
-                workoutName,
-                selectedExerciseIds,
-                plannedDate
-            })
+            if (!isEditMode) {
+                await api.post("/workouts", {
+                    workoutName,
+                    selectedExerciseIds,
+                    plannedDate
+                })
 
-            setSuccessMessage("Added workout successfully")
-            setFormData({
-                workoutName: "",
-                selectedExerciseIds: [],
-                plannedDate: ""
-            })
-            setError("")
-            window.scrollTo(0,0)
+                setSuccessMessage("Added workout successfully")
+                setFormData({
+                    workoutName: "",
+                    selectedExerciseIds: [],
+                    plannedDate: ""
+                })
+                setError("")
+                window.scrollTo(0,0)
+            } else { // TODO backend for edit workouts/id is not there
+                await api.put(`/workouts/${id}`, {
+                    workoutName,
+                    selectedExerciseIds,
+                    plannedDate
+                })
+                navigate("/workouts")
+            }
 
         } catch(err) {
             console.log("Error while adding a new workout:", err)
@@ -51,6 +62,7 @@ function AddWorkout() {
                 const errorMessages = Object.entries(errorData).map(
                     ([field, message]) => `${message}`
                 )
+                setSuccessMessage("")
                 setError(errorMessages)
             } else {
                 setError("An error occurred while adding a new workout")
@@ -63,13 +75,30 @@ function AddWorkout() {
             try {
                 const response = await api.get('/planned')
                 setPlannedExercises(response.data)
+
+                if (isEditMode) {
+                    const workoutResponse = await api.get(`/workouts/${id}`)
+                    const workoutData = workoutResponse.data
+
+                    setFormData({
+                        workoutName: workoutData.workoutName,
+                        selectedExerciseIds: workoutData.selectedExerciseIds,
+                        plannedDate: workoutData.plannedDate
+                    })
+                }
             } catch (err) {
-                console.error('Error fetching planned exercises', err)
-                if(err.response && err.response.status === 401) {
-                    logout()
-                    navigate('/login')
+                console.error('Error fetching data:', err)
+                if (err.response) {
+                    if (err.response.status === 401) {
+                        logout()
+                        navigate('/login')
+                    } else if (err.response.status === 404) {
+                        setError("Workout not found")
+                    } else {
+                        setError('Failed to load data')
+                    }
                 } else {
-                    setError('Failed to load planned exercises')
+                    setError("An error occurred while fetching data")
                 }
             } finally {
                 setLoading(false)
@@ -99,7 +128,7 @@ function AddWorkout() {
     return (
         <Container maxWidth="sm">
             <Typography variant="h4" component="h1" gutterBottom>
-                Plan a new workout
+                Plan your workout
             </Typography>
             <form onSubmit={onSubmit}>
                 <TextField 
@@ -131,7 +160,9 @@ function AddWorkout() {
                     required
                 />
                 <Autocomplete
-                    options={plannedExercises}
+                    options={plannedExercises.filter(
+                        (exercise) => !selectedExerciseIds.includes(exercise.id)
+                    )}
                     getOptionLabel={(option) => `${option.exerciseName}: ${option.plannedSets}x${option.plannedReps}@${option.plannedWeight}kg`}
                     inputValue={inputValue}
                     value={autocompleteValue}
@@ -156,16 +187,18 @@ function AddWorkout() {
                     )}
                     renderTags={() => null}
                 />
-                {error && ( // TODO Add Box to keep the area for error/success constant
-                    <Alert severity="error">
-                        {error}
-                    </Alert>
-                )}
-                {successMessage && (
-                    <Alert severity="success">
-                        {successMessage}
-                    </Alert>
-                )}
+                <Box sx={{ minHeight: '48px'}}>
+                    {error && ( // TODO Add Box to keep the area for error/success constant
+                        <Alert severity="error">
+                            {error}
+                        </Alert>
+                    )}
+                    {successMessage && (
+                        <Alert severity="success">
+                            {successMessage}
+                        </Alert>
+                    )}
+                </Box>
                 {plannedExercises.length === 0 ? (
                     <Typography variant="body1">No planned exercises found</Typography>
                 ) : (
