@@ -13,6 +13,8 @@ function AddWorkout() {
     const [loading, setLoading] = useState(true);
     const [plannedExercises, setPlannedExercises] = useState([]);
     const [inputValue, setInputValue] = useState("");
+    const [autocompleteValue, setAutocompleteValue] = useState(null);
+    const [successMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate()
     const { workoutName, selectedExerciseIds, plannedDate } = formData
 
@@ -30,8 +32,16 @@ function AddWorkout() {
                 selectedExerciseIds,
                 plannedDate
             })
-            navigate("/add-workout")
-            // TODO Add message "Workout added succesfully", reload form and let user add another workout if they wish to
+
+            setSuccessMessage("Added workout successfully")
+            setFormData({
+                workoutName: "",
+                selectedExerciseIds: [],
+                plannedDate: ""
+            })
+            setError("")
+            window.scrollTo(0,0)
+
         } catch(err) {
             console.log("Error while adding a new workout:", err)
             if(err.response && err.response.data) {
@@ -114,8 +124,9 @@ function AddWorkout() {
                 />
                 <Autocomplete
                     options={plannedExercises}
-                    getOptionLabel={(option) => `${option.exerciseName}: ${option.plannedSets}x${option.plannedReps}@${option.plannedWeight}`}
+                    getOptionLabel={(option) => `${option.exerciseName}: ${option.plannedSets}x${option.plannedReps}@${option.plannedWeight}kg`}
                     inputValue={inputValue}
+                    value={autocompleteValue}
                     onInputChange={(event, newInputValue) => {
                         setInputValue(newInputValue)
                     }}
@@ -124,8 +135,9 @@ function AddWorkout() {
                             if(!selectedExerciseIds.includes(newValue.id)) {
                                 setFormData({ ...formData, selectedExerciseIds: [...selectedExerciseIds, newValue.id] })
                             }
-                            setInputValue("")
+                            setAutocompleteValue(null)
                         }
+                        setInputValue("")
                     }}
                     renderInput={(params) => (
                         <TextField
@@ -139,35 +151,42 @@ function AddWorkout() {
                 {plannedExercises.length === 0 ? (
                     <Typography variant="body1">No planned exercises found</Typography>
                 ) : (
-                    <List> {/* TODO Limit list size so user can press save and cancel without scrolling down */}
-                        {plannedExercises.map((exercise) => {
-                            const labelId = `checkbox-list-label-${exercise.id}`
+                    <Box sx={{ maxHeight: "55vh", overflowY: "auto" }}>
+                        <List> {/* TODO Limit list size so user can press save and cancel without scrolling down */}
+                            {plannedExercises.map((exercise) => {
+                                const labelId = `checkbox-list-label-${exercise.id}`
 
-                            return (
-                                <React.Fragment key={exercise.id}>
-                                    <ListItem dense onClick={handleExerciseToggle(exercise.id)}>
-                                        <Checkbox 
-                                            edge="start" 
-                                            checked={selectedExerciseIds.includes(exercise.id)} 
-                                            tabIndex={-1} 
-                                            disableRipple 
-                                            inputProps={{ "aria-labelledby": labelId }}
-                                        />
-                                        <ListItemText
-                                            id={labelId}
-                                            primary={exercise.exerciseName}
-                                            secondary={`${exercise.plannedSets}x${exercise.plannedReps}@${exercise.plannedWeight}`}
-                                        />
-                                    </ListItem>
-                                    <Divider />
-                                </React.Fragment>
-                            )
-                        })}
-                    </List>
+                                return (
+                                    <React.Fragment key={exercise.id}>
+                                        <ListItem dense onClick={handleExerciseToggle(exercise.id)}>
+                                            <Checkbox 
+                                                edge="start" 
+                                                checked={selectedExerciseIds.includes(exercise.id)} 
+                                                tabIndex={-1} 
+                                                disableRipple 
+                                                inputProps={{ "aria-labelledby": labelId }}
+                                            />
+                                            <ListItemText
+                                                id={labelId}
+                                                primary={exercise.exerciseName}
+                                                secondary={`${exercise.plannedSets}x${exercise.plannedReps}@${exercise.plannedWeight}kg`}
+                                            />
+                                        </ListItem>
+                                        <Divider />
+                                    </React.Fragment>
+                                )
+                            })}
+                        </List>
+                    </Box>
                 )}
             {error && (
                 <Alert severity="error">
                     {error}
+                </Alert>
+            )}
+            {successMessage && (
+                <Alert severity="success">
+                    {successMessage}
                 </Alert>
             )}
             <Button type="submit" color="primary" variant="outlined" fullWidth>
