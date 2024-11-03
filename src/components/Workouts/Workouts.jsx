@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Box, Container, Typography, Button, Alert, List, ListItem, ListItemText, Divider, IconButton } from "@mui/material"
+import { Box, CircularProgress, Container, Typography, Button, Alert, List, ListItem, ListItemText, Divider, IconButton } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import AddIcon from "@mui/icons-material/Add"
+import EditIcon from "@mui/icons-material/Edit"
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../../services/api"
@@ -15,6 +16,9 @@ function Workouts() {
 
     const handleAddWorkout = () => {
         navigate("/add-workout")
+    }
+    const handleEditWorkout = async (id) => {
+        navigate(`/edit-workout/${id}`)
     }
     const handleDeleteWorkout = async (id) => {
         try {
@@ -56,6 +60,12 @@ function Workouts() {
         fetchPlannedWorkouts()
     }, [authState.token, logout, navigate])
 
+    if (loading) return (
+        <Container>
+            <CircularProgress />
+        </Container>
+    )
+
     return (
         <Container maxWidth="md">
             <Typography variant="h4" component="h1" gutterBottom>
@@ -76,13 +86,18 @@ function Workouts() {
                     {plannedWorkouts.map((workout) => (
                         <React.Fragment key={workout.id}>
                             <ListItem secondaryAction= {
-                                <IconButton edge="end" onClick={() => handleDeleteWorkout(workout.id)}>
-                                    <DeleteIcon />
-                                </IconButton>
+                                <Box>
+                                    <IconButton edge="start" onClick={() => handleEditWorkout(workout.id)}>
+                                        <EditIcon />
+                                    </IconButton>
+                                    <IconButton edge="end" onClick={() => handleDeleteWorkout(workout.id)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Box>
                             }>
-                                <ListItemText 
-                                    primary={workout.workoutName}
-                                />
+                            <ListItemText 
+                                primary={workout.workoutName}
+                            />
                             </ListItem>
                             <Divider />
                         </React.Fragment>

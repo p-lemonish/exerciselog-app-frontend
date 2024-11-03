@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api"
 import { Box, CircularProgress, List, Alert, Button, Container, TextField, Typography, ListItem, Checkbox, ListItemText, Divider, Autocomplete } from "@mui/material";
 import { AuthContext } from "../../context/AuthContext"
 
-function AddWorkout() {
+function EditWorkout() {
     const [formData, setFormData] = useState({
         workoutName: "",
         selectedExerciseIds: [],
@@ -18,6 +18,7 @@ function AddWorkout() {
     const [successMessage, setSuccessMessage] = useState("");
     const { authState, logout } = useContext(AuthContext)
     const navigate = useNavigate()
+    const { id } = useParams()
     const { workoutName, selectedExerciseIds, plannedDate } = formData
 
     const handleCancel = () => {
@@ -29,23 +30,15 @@ function AddWorkout() {
     const onSubmit = async (e) => {
         e.preventDefault()
         try {
-            await api.post("/workouts", {
+            await api.put(`/workouts/${id}`, {
                 workoutName,
                 selectedExerciseIds,
                 plannedDate
             })
 
-            setSuccessMessage("Added workout successfully")
-            setFormData({
-                workoutName: "",
-                selectedExerciseIds: [],
-                plannedDate: ""
-            })
             setError("")
-            window.scrollTo(0,0)
-
         } catch(err) {
-            console.log("Error while adding a new workout:", err)
+            console.log("Error while editing workout:", err)
             if(err.response && err.response.data) {
                 const errorData = err.response.data
                 const errorMessages = Object.entries(errorData).map(
@@ -53,7 +46,7 @@ function AddWorkout() {
                 )
                 setError(errorMessages)
             } else {
-                setError("An error occurred while adding a new workout")
+                setError("An error occurred while editing workout")
             }
         }
     }
@@ -99,7 +92,7 @@ function AddWorkout() {
     return (
         <Container maxWidth="sm">
             <Typography variant="h4" component="h1" gutterBottom>
-                Plan a new workout
+                Edit workout
             </Typography>
             <form onSubmit={onSubmit}>
                 <TextField 
@@ -209,4 +202,4 @@ function AddWorkout() {
     )
 }
 
-export default AddWorkout
+export default EditWorkout
