@@ -24,6 +24,7 @@ function StartWorkout() {
     workoutName: '',
     plannedDate: '',
     exercises: [],
+    workoutNotes: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -55,7 +56,9 @@ function StartWorkout() {
             ...exercise,
             currentReps: exercise.setLogDtoList.map((set) => set.reps),
             currentWeight: exercise.setLogDtoList.map((set) => set.weight),
+            exerciseNotes: '',
           })),
+          workoutNotes: '',
         });
       } catch (err) {
         console.error('Error fetching workout', err);
@@ -92,7 +95,29 @@ function StartWorkout() {
     setFormData({ ...formData, exercises: updatedExercises });
   };
 
-  const onSubmit = () => {};
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    try {
+      const workoutLog = {
+        workoutNotes: formData.workoutNotes,
+        exercises: formData.exercises.map((exercise, exerciseIndex) => ({
+          exerciseId: exercise.exerciseId,
+          exerciseNotes: exercise.exerciseNotes,
+          exerciseName: exercise.exerciseName,
+          setLogDtoList: exercise.setLogDtoList.map((set, setIndex) => ({
+            setNumber: set.setNumber,
+            reps: exercise.currentReps[setIndex],
+            weight: exercise.currentWeight[setIndex],
+          })),
+        })),
+      };
+      await api.post(`/workouts/complete/${id}`, workoutLog);
+      navigate('/workouts');
+    } catch (err) {
+      console.error('Error completing workout', err);
+    }
+  };
 
   return (
     <Container
@@ -113,7 +138,7 @@ function StartWorkout() {
         ) : (
           <List>
             {exercises.map((exercise, exerciseIndex) => (
-              <React.Fragment key={exerciseIndex}>
+              <React.Fragment key={exercise.exerciseId}>
                 <Typography variant="h6">{exercise.exerciseName}</Typography>
                 <List>
                   {exercise.setLogDtoList.map((set, setIndex) => (
@@ -157,10 +182,39 @@ function StartWorkout() {
                     </ListItem>
                   ))}
                 </List>
+                <TextField
+                  label="Exercise Notes (optional)"
+                  name="exerciseNotes"
+                  value={exercise.exerciseNotes}
+                  onChange={(e) => {
+                    const updatedExercises = [...formData.exercises];
+                    updatedExercises[exerciseIndex].exerciseNotes =
+                      e.target.value;
+                    setFormData({ ...formData, exercises: updatedExercises });
+                  }}
+                  multiline
+                  rows={2}
+                  fullWidth
+                  variant="outlined"
+                  sx={{ mb: 2 }}
+                />
               </React.Fragment>
             ))}
           </List>
         )}
+        <TextField
+          label="Workout Notes (optional)"
+          name="workoutNotes"
+          value={formData.workoutNotes}
+          onChange={(e) => {
+            setFormData({ ...formData, workoutNotes: e.target.value });
+          }}
+          multiline
+          rows={2}
+          fullWidth
+          variant="outlined"
+          sx={{ mb: 2 }}
+        />
         <Box sx={{ mt: 2 }}>
           <Button type="submit" color="primary" variant="outlined" fullWidth>
             Complete workout
