@@ -37,7 +37,7 @@ function Workouts() {
         }
     }
     const handleStartWorkout = async (id) => {
-        navigate("/start-workout")
+        navigate(`/start-workout/${id}`)
     }
     const fetchPlannedWorkouts = async () => {
         try {
@@ -85,12 +85,20 @@ function Workouts() {
                 <List sx={{ width: "100%" }}>
                     {plannedWorkouts.map((workout) => (
                         <React.Fragment key={workout.id}>
-                            <ListItem secondaryAction= {
+                            <ListItem
+                            onClick = {() => handleStartWorkout(workout.id)}
+                            secondaryAction= {
                                 <Box>
-                                    <IconButton edge="start" onClick={() => handleEditWorkout(workout.id)}>
+                                    <IconButton edge="start" onClick={(e) => { 
+                                        e.stopPropagation() 
+                                        handleEditWorkout(workout.id)
+                                    }}>
                                         <EditIcon />
                                     </IconButton>
-                                    <IconButton edge="end" onClick={() => handleDeleteWorkout(workout.id)}>
+                                    <IconButton edge="end" onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleDeleteWorkout(workout.id)
+                                    }}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </Box>

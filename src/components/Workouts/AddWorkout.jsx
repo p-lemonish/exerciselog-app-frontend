@@ -187,18 +187,16 @@ function AddWorkout() {
                     )}
                     renderTags={() => null}
                 />
-                <Box sx={{ minHeight: '48px'}}>
-                    {error && ( // TODO Add Box to keep the area for error/success constant
-                        <Alert severity="error">
-                            {error}
-                        </Alert>
-                    )}
-                    {successMessage && (
-                        <Alert severity="success">
-                            {successMessage}
-                        </Alert>
-                    )}
-                </Box>
+                {error && ( 
+                    <Alert severity="error">
+                        {error}
+                    </Alert>
+                )}
+                {successMessage && (
+                    <Alert severity="success">
+                        {successMessage}
+                    </Alert>
+                )}
                 {plannedExercises.length === 0 ? (
                     <Typography variant="body1">No planned exercises found</Typography>
                 ) : (
