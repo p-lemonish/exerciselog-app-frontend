@@ -1,6 +1,4 @@
 function ExerciseLogs() {
-    return(
-        console.log("xdd")
-    )
+  return console.log('xdd');
 }
-export default ExerciseLogs
+export default ExerciseLogs;

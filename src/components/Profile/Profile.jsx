@@ -1,6 +1,4 @@
 function Profile() {
-    return(
-        console.log("xdd")
-    )
+  return console.log('xdd');
 }
-export default Profile
+export default Profile;
