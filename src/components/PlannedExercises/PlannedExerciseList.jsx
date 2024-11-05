@@ -75,7 +75,14 @@ function PlannedExerciseList() {
     );
 
   return (
-    <Container maxWidth="md">
+    <Container
+      maxWidth="md"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        paddingBottom: '64px',
+      }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Planned Exercises
       </Typography>
@@ -117,7 +124,6 @@ function PlannedExerciseList() {
           ))}
         </List>
       )}
-      <Box sx={{ height: '80px' /* fix for navbar getting no padding */ }} />
     </Container>
   );
 }

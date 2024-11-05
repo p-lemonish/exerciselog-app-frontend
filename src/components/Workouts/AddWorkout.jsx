@@ -19,9 +19,11 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 
 function AddWorkout() {
-  const { id } = useParams();
-  const isEditMode = Boolean(id);
+  const params = useParams();
+  const idFromParams = params.id ? Number(params.id) : null
+  const isEditMode = Boolean(idFromParams);
   const [formData, setFormData] = useState({
+    id: 0,
     workoutName: '',
     selectedExerciseIds: [],
     plannedDate: '',
@@ -34,7 +36,7 @@ function AddWorkout() {
   const [successMessage, setSuccessMessage] = useState('');
   const { authState, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const { workoutName, selectedExerciseIds, plannedDate } = formData;
+  const { id, workoutName, selectedExerciseIds, plannedDate } = formData;
 
   const handleCancel = () => {
     navigate(-1);
@@ -47,6 +49,7 @@ function AddWorkout() {
     try {
       if (!isEditMode) {
         await api.post('/workouts', {
+          id,
           workoutName,
           selectedExerciseIds,
           plannedDate,
@@ -54,6 +57,7 @@ function AddWorkout() {
 
         setSuccessMessage('Added workout successfully');
         setFormData({
+          id: 0,
           workoutName: '',
           selectedExerciseIds: [],
           plannedDate: '',
@@ -61,8 +65,8 @@ function AddWorkout() {
         setError('');
         window.scrollTo(0, 0);
       } else {
-        // TODO backend for edit workouts/id is not there
-        await api.put(`/workouts/${id}`, {
+        await api.put(`/workouts/${idFromParams}`, {
+          id,
           workoutName,
           selectedExerciseIds,
           plannedDate,
@@ -91,10 +95,11 @@ function AddWorkout() {
         setPlannedExercises(response.data);
 
         if (isEditMode) {
-          const workoutResponse = await api.get(`/workouts/${id}`);
+          const workoutResponse = await api.get(`/workouts/${idFromParams}`);
           const workoutData = workoutResponse.data;
 
           setFormData({
+            id: workoutData.id,
             workoutName: workoutData.workoutName,
             selectedExerciseIds: workoutData.selectedExerciseIds,
             plannedDate: workoutData.plannedDate,

@@ -91,7 +91,7 @@ function Workouts() {
         startIcon={<AddIcon />}
         onClick={handleAddWorkout}
         fullWidth>
-        Plan New Workout
+        Plan a New Workout
       </Button>
       {error && (
         <Alert severity="error" onClose={() => setError(null)}>
