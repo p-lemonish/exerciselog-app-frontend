@@ -18,7 +18,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// TODO add the ability to edit a planned exercise
+// TODO add the ability to edit a planned exercise, also autocomplete search might be necessary then
 function PlannedExerciseList() {
   const [plannedExercises, setPlannedExercises] = useState([]);
   const [loading, setLoading] = useState(true);
