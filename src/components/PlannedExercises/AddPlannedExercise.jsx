@@ -59,7 +59,7 @@ function AddPlannedExercise() {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ paddingTop: "20px" }}>
       <Typography variant="h4" component="h1" gutterBottom>
         Plan a new exercise
       </Typography>

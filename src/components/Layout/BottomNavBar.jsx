@@ -27,7 +27,7 @@ function BottomNavBar() {
     3: '/profile',
   };
 
-  const currentIndex = pathToIndex[location.pathname] || 0; // TODO set index by a path's parent, so /add-workouts would default to index of workouts
+  const currentIndex = pathToIndex[location.pathname] || 0; 
 
   const [value, setValue] = useState(currentIndex);
 

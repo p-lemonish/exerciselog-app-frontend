@@ -127,6 +127,7 @@ function StartWorkout() {
         flexDirection: 'column',
         height: '100vh',
         paddingBottom: '64px',
+        paddingTop: '20px',
       }}>
       <Box sx={{ flexShrink: 0 }}>
       <Typography variant="h5" noWrap gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "pre-line" }}>

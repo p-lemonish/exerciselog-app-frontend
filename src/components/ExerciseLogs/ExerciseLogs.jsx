@@ -72,6 +72,7 @@ function ExerciseLogs() {
         flexDirection: 'column',
         height: '100vh',
         paddingBottom: '64px',
+        paddingTop: '20px',
       }}>
       <Box sx={{ flexShrink: 0 }}>
         <Typography variant="h4" gutterBottom>
