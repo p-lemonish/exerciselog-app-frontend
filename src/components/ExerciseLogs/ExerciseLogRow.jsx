@@ -17,7 +17,6 @@ import {
 } from '@mui/icons-material';
 
 function ExerciseLogRow({ log, open, onToggle }) {
-
   const averageWeight =
     log.setLogDtoList && log.setLogDtoList.length > 0
       ? (
@@ -29,24 +28,27 @@ function ExerciseLogRow({ log, open, onToggle }) {
   return (
     <>
       <TableRow onClick={onToggle}>
-        <TableCell sx={{
-          width: 40,
-          padding: "1px",
-          textAlign: "left"
-        }}>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-          >
-            {open ? <KeyboardArrowUpIcon fontSize='small' /> : <KeyboardArrowDownIcon fontSize='small' />}
+        <TableCell
+          padding="none"
+          sx={{
+            width: 40,
+            textAlign: 'left',
+          }}>
+          <IconButton aria-label="expand row" size="small">
+            {open ? (
+              <KeyboardArrowUpIcon fontSize="small" />
+            ) : (
+              <KeyboardArrowDownIcon fontSize="small" />
+            )}
           </IconButton>
         </TableCell>
-        <TableCell padding='none' sx={{ minWidth: 100 }}>
+        <TableCell padding="none" sx={{ maxWidth: 100 }}>
           {new Date(log.date).toLocaleDateString()}
         </TableCell>
-        <TableCell padding='none'
+        <TableCell
+          padding="normal"
           sx={{
-            maxWidth: 100,
+            maxWidth: 110,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -54,49 +56,73 @@ function ExerciseLogRow({ log, open, onToggle }) {
           title={log.exerciseName}>
           {log.exerciseName}
         </TableCell>
-        <TableCell padding='none' sx={{ minWidth: 120 }}>
+        <TableCell
+          padding="none"
+          sx={{
+            paddingRight: '10px',
+            maxWidth: 80,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}>
           {log.setLogDtoList &&
-            log.setLogDtoList.slice(0, 3).map((set, index) => (
+            log.setLogDtoList.map((set, index) => (
               <span key={`${log.id}-${set.setNumber}`}>
                 {set.reps}
-                {index < log.setLogDtoList.slice(0, 3).length - 1 ? ', ' : ''}
+                {index < log.setLogDtoList.length - 1 ? ', ' : ''}
               </span>
             ))}
-          {log.setLogDtoList && log.setLogDtoList.length > 3 ? '...' : ''}
         </TableCell>
-        <TableCell padding='none' sx={{ maxWidth: 100 }}>{averageWeight ? `${averageWeight} kg` : ''}</TableCell>
+        <TableCell padding="none" sx={{ maxWidth: 150 }}>
+          {averageWeight ? `${averageWeight} kg` : ''}
+        </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
+        <TableCell
+          style={{ paddingBottom: 0, paddingTop: 0 }}
+          colSpan={5}
+          sx={{ maxWidth: '100%', overflowX: 'auto' }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <Typography gutterBottom component="div">
+              <Typography
+                sx={{
+                  overflowWrap: 'break-word',
+                  wordBreak: 'break-word',
+                }}>
                 {log.exerciseName}
               </Typography>
               <Table size="small" aria-label="details">
                 <TableHead>
                   <TableRow>
-                    <TableCell padding='none'>Set Number</TableCell>
-                    <TableCell padding='none'>Reps</TableCell>
-                    <TableCell padding='none'>Weight</TableCell>
+                    <TableCell padding="normal">Set Number</TableCell>
+                    <TableCell padding="normal">Reps</TableCell>
+                    <TableCell padding="normal">Weight</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {log.setLogDtoList &&
                     log.setLogDtoList.map((set) => (
                       <TableRow key={`Collapse-${log.id}-${set.setNumber}`}>
-                        <TableCell padding='none' component="th" scope="row">
+                        <TableCell padding="normal" component="th" scope="row">
                           {set.setNumber}
                         </TableCell>
-                        <TableCell padding='none'>{set.reps}</TableCell>
-                        <TableCell padding='none'>{set.weight.toFixed(2)}kg</TableCell>
+                        <TableCell padding="normal">{set.reps}</TableCell>
+                        <TableCell padding="normal">
+                          {set.weight.toFixed(2)}kg
+                        </TableCell>
                       </TableRow>
                     ))}
                   {log.exerciseNotes && (
                     <TableRow key={`Note-${log.id}`}>
                       <TableCell colSpan={3}>
-                        <Typography variant="body2">
-                          <strong>Note:</strong>{log.exerciseNotes}
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            overflowWrap: 'break-word',
+                            wordBreak: 'break-word',
+                          }}>
+                          <strong>Note: </strong>
+                          {log.exerciseNotes}
                         </Typography>
                       </TableCell>
                     </TableRow>
@@ -111,4 +137,4 @@ function ExerciseLogRow({ log, open, onToggle }) {
   );
 }
 
-export default ExerciseLogRow
+export default ExerciseLogRow;

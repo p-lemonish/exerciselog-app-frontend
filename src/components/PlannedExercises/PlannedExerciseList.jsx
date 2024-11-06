@@ -80,50 +80,73 @@ function PlannedExerciseList() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        height: '100vh',
         paddingBottom: '64px',
       }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Planned Exercises
-      </Typography>
-      <Button
-        type="submit"
-        color="primary"
-        variant="contained"
-        startIcon={<AddIcon />}
-        onClick={handleAddExercise}
-        fullWidth>
-        Add New Exercise
-      </Button>
-      {error && (
-        <Alert severity="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
-      {plannedExercises.length === 0 ? (
-        <Typography variant="body1">No planned exercises found</Typography>
-      ) : (
-        <List sx={{ width: '100%' }}>
-          {plannedExercises.map((exercise) => (
-            <React.Fragment key={exercise.id}>
-              <ListItem
-                secondaryAction={
-                  <IconButton
-                    edge="end"
-                    onClick={() => handleDeleteExercise(exercise.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                }>
-                <ListItemText
-                  primary={exercise.exerciseName}
-                  secondary={`Sets: ${exercise.plannedSets}, Reps: ${exercise.plannedReps}, Weight: ${exercise.plannedWeight}kg (${exercise.muscleGroup})`}
-                />
-              </ListItem>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </List>
-      )}
+      <Box sx={{ flexShrink: 0 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Planned Exercises
+        </Typography>
+        <Button
+          type="submit"
+          color="primary"
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleAddExercise}
+          fullWidth>
+          Add New Exercise
+        </Button>
+        {error && (
+          <Alert severity="error" onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
+      </Box>
+      <Box sx={{ flexGrow: 1, overflowY: 'auto', mt: 1, mb: 1 }}>
+        {plannedExercises.length === 0 ? (
+          <Typography variant="body1">No planned exercises found</Typography>
+        ) : (
+          <List>
+            {plannedExercises.map((exercise) => (
+              <React.Fragment key={exercise.id}>
+                <ListItem
+                  secondaryAction={
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDeleteExercise(exercise.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  }>
+                  <ListItemText
+                    primary={
+                      <Typography
+                        variant="body1"
+                        noWrap
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}>
+                        {exercise.exerciseName}
+                      </Typography>
+                    }
+                    secondary={`Sets: ${exercise.plannedSets}, Reps: ${exercise.plannedReps}, Weight: ${exercise.plannedWeight}kg (${exercise.muscleGroup})`}
+                    secondaryTypographyProps={{
+                      noWrap: true,
+                      sx: {
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      },
+                    }}
+                  />
+                </ListItem>
+                <Divider />
+              </React.Fragment>
+            ))}
+          </List>
+        )}
+      </Box>
     </Container>
   );
 }

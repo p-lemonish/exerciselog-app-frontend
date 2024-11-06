@@ -20,7 +20,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 function AddWorkout() {
   const params = useParams();
-  const idFromParams = params.id ? Number(params.id) : null
+  const idFromParams = params.id ? Number(params.id) : null;
   const isEditMode = Boolean(idFromParams);
   const [formData, setFormData] = useState({
     id: 0,
@@ -44,7 +44,7 @@ function AddWorkout() {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (!isEditMode) {
@@ -151,15 +151,13 @@ function AddWorkout() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        height: '100vh',
         paddingBottom: '64px',
       }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Plan your workout
-      </Typography>
-      <form
-        onSubmit={onSubmit}
-        style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ flexShrink: 0 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Plan your workout
+        </Typography>
         <TextField
           label="Workout Name"
           name="workoutName"
@@ -172,7 +170,7 @@ function AddWorkout() {
             },
           }}
           fullWidth
-          sx={{ mb: 2 }}
+          sx={{ mb: 1 }}
           required
         />
         <TextField
@@ -187,7 +185,7 @@ function AddWorkout() {
             },
           }}
           fullWidth
-          sx={{ mb: 2 }}
+          sx={{ mb: 1 }}
           required
         />
         <Autocomplete
@@ -222,10 +220,14 @@ function AddWorkout() {
             />
           )}
           renderTags={() => null}
+          sx={{ mb: 1 }}
         />
         {error && <Alert severity="error">{error}</Alert>}
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
-        <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+      </Box>
+      <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
+        <form
+          style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {plannedExercises.length === 0 ? (
             <Typography variant="body1">No planned exercises found</Typography>
           ) : (
@@ -244,9 +246,27 @@ function AddWorkout() {
                         inputProps={{ 'aria-labelledby': labelId }}
                       />
                       <ListItemText
-                        id={labelId}
-                        primary={exercise.exerciseName}
+                        primary={
+                          <Typography
+                            variant="body1"
+                            noWrap
+                            sx={{
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}>
+                            {exercise.exerciseName}
+                          </Typography>
+                        }
                         secondary={`${exercise.plannedSets}x${exercise.plannedReps}@${exercise.plannedWeight}kg`}
+                        secondaryTypographyProps={{
+                          noWrap: true,
+                          sx: {
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          },
+                        }}
                       />
                     </ListItem>
                     <Divider />
@@ -255,21 +275,21 @@ function AddWorkout() {
               })}
             </List>
           )}
-        </Box>
-        <Box sx={{ mt: 2 }}>
-          <Button type="submit" color="primary" variant="outlined" fullWidth>
-            Save
-          </Button>
-          <Button
-            type="cancel"
-            color="primary"
-            variant="outlined"
-            onClick={handleCancel}
-            fullWidth>
-            Cancel
-          </Button>
-        </Box>
-      </form>
+        </form>
+      </Box>
+      <Box sx={{ mt: 1 }}>
+        <Button onClick={handleSubmit} color="primary" variant="outlined" fullWidth>
+          Save
+        </Button>
+        <Button
+          type="cancel"
+          color="primary"
+          variant="outlined"
+          onClick={handleCancel}
+          fullWidth>
+          Cancel
+        </Button>
+      </Box>
     </Container>
   );
 }

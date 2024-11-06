@@ -11,6 +11,9 @@ import {
   ListItemText,
   Divider,
   IconButton,
+  Autocomplete,
+  TextField,
+  ListItemButton,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -21,6 +24,8 @@ import api from '../../services/api';
 
 function Workouts() {
   const [plannedWorkouts, setPlannedWorkouts] = useState([]);
+  const [workoutNames, setWorkoutNames] = useState([]);
+  const [selectedWorkout, setSelectedWorkout] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { authState, logout } = useContext(AuthContext);
@@ -55,6 +60,14 @@ function Workouts() {
     try {
       const response = await api.get('/workouts');
       setPlannedWorkouts(response.data);
+      const uniqueNames = [
+        ...new Set(
+          response.data
+            .map((workout) => workout.workoutName)
+            .filter((name) => name != null)
+        ),
+      ];
+      setWorkoutNames(uniqueNames);
     } catch (err) {
       console.error('Error fetching planned exercises', err);
       if (err.response && err.response.status === 401) {
@@ -80,60 +93,86 @@ function Workouts() {
     );
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Planned Workouts
-      </Typography>
-      <Button
-        type="submit"
-        color="primary"
-        variant="contained"
-        startIcon={<AddIcon />}
-        onClick={handleAddWorkout}
-        fullWidth>
-        Plan a New Workout
-      </Button>
-      {error && (
-        <Alert severity="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
-      {plannedWorkouts.length === 0 ? (
-        <Typography variant="body1">No planned workouts found</Typography>
-      ) : (
-        <List sx={{ width: '100%' }}>
-          {plannedWorkouts.map((workout) => (
-            <React.Fragment key={workout.id}>
-              <ListItem
-                onClick={() => handleStartWorkout(workout.id)}
-                secondaryAction={
-                  <Box>
-                    <IconButton
-                      edge="start"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditWorkout(workout.id);
-                      }}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteWorkout(workout.id);
-                      }}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                }>
-                <ListItemText primary={workout.workoutName} />
-              </ListItem>
-              <Divider />
-            </React.Fragment>
-          ))}
-        </List>
-      )}
-      <Box sx={{ height: '80px' /* fix for navbar getting no padding */ }} />
+    <Container
+      maxWidth="md"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        paddingBottom: '64px',
+      }}>
+      <Box sx={{ flexShrink: 0 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Planned Workouts
+        </Typography>
+        <Button
+          type="submit"
+          color="primary"
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleAddWorkout}
+          fullWidth>
+          Plan a New Workout
+        </Button>
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Tap on a workout to start it.
+        </Typography>
+        {error && (
+          <Alert severity="error" onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
+      </Box>
+      <Box sx={{ flexGrow: 1, overflowY: 'auto', mt: 1, mb: 1 }}>
+        {plannedWorkouts.length === 0 ? (
+          <Typography variant="body1">No planned workouts found</Typography>
+        ) : (
+          <List sx={{ width: '100%' }}>
+            {plannedWorkouts.map((workout) => (
+              <React.Fragment key={workout.id}>
+                <ListItem
+                  secondaryAction={
+                    <Box>
+                      <IconButton
+                        edge="start"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditWorkout(workout.id);
+                        }}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteWorkout(workout.id);
+                        }}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
+                  }>
+                  <ListItemButton
+                    onClick={() => handleStartWorkout(workout.id)}>
+                    <ListItemText
+                      primary={workout.workoutName}
+                      primaryTypographyProps={{
+                        noWrap: true,
+                        sx: {
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          pr: 5,
+                        },
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <Divider />
+              </React.Fragment>
+            ))}
+          </List>
+        )}
+      </Box>
     </Container>
   );
 }

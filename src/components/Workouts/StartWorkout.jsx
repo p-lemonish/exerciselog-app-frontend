@@ -125,21 +125,26 @@ function StartWorkout() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        height: '100vh',
         paddingBottom: '64px',
       }}>
-      <Typography variant="h4" gutterBottom>
-        Start workout: {workoutName} - {plannedDate}
+      <Box sx={{ flexShrink: 0 }}>
+      <Typography variant="h5" noWrap gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "pre-line" }}>
+        Start workout:{'\n'}
+        {workoutName}{"\n"}
+        - {plannedDate}{"\n"}
       </Typography>
       {error && <Alert severity="error">{error}</Alert>}
-      <form onSubmit={onSubmit}>
+      </Box>
+      <Box sx={{ flexGrow: 1, overflowY: 'auto', mt: 1, mb: 1 }}>
+      <form>
         {exercises.length === 0 ? (
           <Typography variant="body1">No exercises found</Typography>
         ) : (
           <List>
             {exercises.map((exercise, exerciseIndex) => (
               <React.Fragment key={exercise.exerciseId}>
-                <Typography variant="h6">{exercise.exerciseName}</Typography>
+                <Typography variant="h6" sx={{ mt: 2 }}>{exercise.exerciseName}</Typography>
                 <List>
                   {exercise.setLogDtoList.map((set, setIndex) => (
                     <ListItem key={set.setNumber}>
@@ -196,7 +201,6 @@ function StartWorkout() {
                   rows={2}
                   fullWidth
                   variant="outlined"
-                  sx={{ mb: 2 }}
                 />
               </React.Fragment>
             ))}
@@ -213,10 +217,11 @@ function StartWorkout() {
           rows={2}
           fullWidth
           variant="outlined"
-          sx={{ mb: 2 }}
         />
+      </form>
+      </Box>
         <Box sx={{ mt: 2 }}>
-          <Button type="submit" color="primary" variant="outlined" fullWidth>
+          <Button onClick={() => onSubmit()} color="primary" variant="outlined" fullWidth>
             Complete workout
           </Button>
           <Button
@@ -228,7 +233,6 @@ function StartWorkout() {
             Cancel
           </Button>
         </Box>
-      </form>
     </Container>
   );
 }

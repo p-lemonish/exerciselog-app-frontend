@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Autocomplete,
+  Box,
   Button,
   Container,
   Paper,
@@ -69,37 +70,40 @@ function ExerciseLogs() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        height: '100vh',
         paddingBottom: '64px',
       }}>
-      <Typography variant="h4" gutterBottom>
-        Exercise Logs
-      </Typography>
-      <Autocomplete
-        options={exerciseNames}
-        value={selectedExercise}
-        getOptionLabel={(option) => (option ? option : '')}
-        onChange={(event, newValue) => {
-          setSelectedExercise(newValue || '');
-        }}
-        renderInput={(params) => (
-          <TextField {...params} label="Search Exercises" variant="outlined" />
+      <Box sx={{ flexShrink: 0 }}>
+        <Typography variant="h4" gutterBottom>
+          Exercise Logs
+        </Typography>
+        <Autocomplete
+          options={exerciseNames}
+          value={selectedExercise}
+          getOptionLabel={(option) => (option ? option : '')}
+          onChange={(event, newValue) => {
+            setSelectedExercise(newValue || '');
+          }}
+          renderInput={(params) => (
+            <TextField {...params} label="Search Exercises" variant="outlined" />
+          )}
+          sx={{ mb: 1 }}
+        />
+        {error && (
+          <Alert severity="error" onClose={() => setError(null)}>
+            {error}
+          </Alert>
         )}
-      />
-      {error && (
-        <Alert severity="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
+      </Box>
       <Paper sx={{ width: '100%', overflowX: 'auto' }}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Date</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Reps</TableCell>
-              <TableCell>Weight</TableCell>
+              <TableCell padding='none'>Date</TableCell>
+              <TableCell padding='normal'>Name</TableCell>
+              <TableCell padding='none'>Reps</TableCell>
+              <TableCell padding='none'>Weight</TableCell>
             </TableRow>
           </TableHead>
           {exerciseLogs.length === 0 ? (
