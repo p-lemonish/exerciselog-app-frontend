@@ -80,10 +80,6 @@ function Profile() {
     }
   };
 
-  const handleAdminDashboard = () => {
-    navigate('/admin/users');
-  };
-
   return (
     <Container
       maxWidth="sm"
@@ -107,17 +103,6 @@ function Profile() {
         <Typography variant="body1">
           <strong>Role:</strong> {user.roleName}
         </Typography>
-
-        {user.roleName === 'ADMIN' && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAdminDashboard}
-            sx={{ mt: 2 }}
-            fullWidth>
-            Go to Admin Dashboard
-          </Button>
-        )}
 
         <Typography variant="h5" sx={{ mt: 4 }}>
           Change Password
