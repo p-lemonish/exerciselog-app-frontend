@@ -164,6 +164,19 @@ function Profile() {
           </Button>
         </form>
       </Box>
+      <Box sx={{ flexGrow: 1, overflowY: 'auto', mb: 2 }}>
+          <Button
+            onClick={() => {
+              logout()
+              navigate("/login")
+            }}
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}>
+            Logout
+          </Button>
+      </Box>
     </Container>
   );
 }
