@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import { Alert, Button, Container, TextField, Typography } from '@mui/material';
 
+{/* 
+    TODO Show a list of exercise names/muscle groups and allow the user to "duplicate" a planned exercise.
+    Perhaps it could work in a way where they could click a name, and it will pre-fill the form with latest
+    Planned Exercise data? Or just implement a duplicate functionality to the list.
+    => User can duplicate a planned exercise, which appears below the original. User goes to edit the
+    duplicate and thus has saved time.
+*/}
 function AddPlannedExercise() {
   const [formData, setFormData] = useState({
     exerciseName: '',
