@@ -8,6 +8,7 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Container,
   List,
   ListItem,
@@ -118,6 +119,22 @@ function StartWorkout() {
       console.error('Error completing workout', err);
     }
   };
+
+  if (loading)
+    return (
+      <Container
+        maxWidth="md"
+        sx={{
+          display: 'flex',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: '64px',
+          paddingTop: '20px',
+        }}>
+        <CircularProgress />
+      </Container>
+    );
 
   return (
     <Container

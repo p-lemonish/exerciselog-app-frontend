@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Container,
   Paper,
   Table,
@@ -59,6 +60,22 @@ function ExerciseLogs() {
       setLoading(false);
     }
   };
+
+  if (loading)
+    return (
+      <Container
+        maxWidth="md"
+        sx={{
+          display: 'flex',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: '64px',
+          paddingTop: '20px',
+        }}>
+        <CircularProgress />
+      </Container>
+    );
 
   const filteredLogs = selectedExercise
     ? exerciseLogs.filter((log) => log.exerciseName === selectedExercise)

@@ -5,6 +5,7 @@ import {
   Alert,
   Box,
   Button,
+  CircularProgress,
   Container,
   InputAdornment,
   List,
@@ -16,13 +17,6 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 import NumberInput from '../NumberInput';
 
-{
-  /* 
-    TODO Show a list of exercise names/muscle groups and allow the user to "duplicate" a planned exercise.
-    Perhaps it could work in a way where they could click a name, and it will pre-fill the form with latest
-    Planned Exercise data
-*/
-}
 function AddPlannedExercise() {
   const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -35,6 +29,7 @@ function AddPlannedExercise() {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const { authState, logout } = useContext(AuthContext);
 
   const {
@@ -48,6 +43,7 @@ function AddPlannedExercise() {
 
   useEffect(() => {
     if (id) {
+      setLoading(true)
       handleCopy();
     }
   }, [id, logout, navigate]);
@@ -65,6 +61,8 @@ function AddPlannedExercise() {
       });
     } catch (err) {
       console.error('Error fetching exercise', err);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -113,6 +111,22 @@ function AddPlannedExercise() {
       }
     }
   };
+
+  if (loading)
+    return (
+      <Container
+        maxWidth="md"
+        sx={{
+          display: 'flex',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: '64px',
+          paddingTop: '20px',
+        }}>
+        <CircularProgress />
+      </Container>
+    );
 
   return (
     <Container maxWidth="sm" sx={{ paddingTop: '20px' }}>

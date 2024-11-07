@@ -6,6 +6,7 @@ import {
   Button,
   Alert,
   Box,
+  CircularProgress,
 } from '@mui/material';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
@@ -26,6 +27,7 @@ function Profile() {
     confirmNewPassword: '',
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(true);
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
 
@@ -40,6 +42,8 @@ function Profile() {
           logout();
           navigate('/login');
         }
+      } finally {
+        setLoading(false)
       }
     };
     fetchUserProfile();
@@ -79,6 +83,22 @@ function Profile() {
       }
     }
   };
+
+  if (loading)
+    return (
+      <Container
+        maxWidth="md"
+        sx={{
+          display: 'flex',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: '64px',
+          paddingTop: '20px',
+        }}>
+        <CircularProgress />
+      </Container>
+    );
 
   return (
     <Container

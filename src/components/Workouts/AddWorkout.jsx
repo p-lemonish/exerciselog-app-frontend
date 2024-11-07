@@ -140,7 +140,16 @@ function AddWorkout() {
 
   if (loading)
     return (
-      <Container>
+      <Container
+        maxWidth="md"
+        sx={{
+          display: 'flex',
+          height: '100vh',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingBottom: '64px',
+          paddingTop: '20px',
+        }}>
         <CircularProgress />
       </Container>
     );
