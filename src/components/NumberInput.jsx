@@ -35,11 +35,11 @@ const InputRoot = styled('div')(
   ({ theme }) => `
     display: flex;
     align-items: center;
-    border: 1px solid ${theme.palette.grey[400]};
+    border: 1px solid ${theme.palette.grey[700]};
     border-radius: 4px;
     background-color: ${theme.palette.background.paper};
     padding: 0 8px;
-    max-width: 180px;
+    max-width: 220px;
     min-width: 80px;
   `
 );
