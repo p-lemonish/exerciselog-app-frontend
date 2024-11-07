@@ -14,6 +14,8 @@ import {
   Alert,
   CircularProgress,
   Box,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,6 +23,8 @@ import { ContentCopy } from '@mui/icons-material';
 
 function PlannedExerciseList() {
   const [plannedExercises, setPlannedExercises] = useState([]);
+  const [exerciseNames, setExerciseNames] = useState([]);
+  const [selectedExercise, setSelectedExercise] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const { authState, logout } = useContext(AuthContext);
@@ -54,6 +58,14 @@ function PlannedExerciseList() {
   const fetchPlannedExercises = async () => {
     try {
       const response = await api.get('/planned');
+      const uniqueNames = [
+        ...new Set(
+          response.data
+            .map((exercise) => exercise.exerciseName)
+            .filter((name) => name != null)
+        ),
+      ];
+      setExerciseNames(uniqueNames);
       setPlannedExercises(response.data);
     } catch (err) {
       console.error('Error fetching planned exercises', err);
@@ -79,6 +91,10 @@ function PlannedExerciseList() {
       </Container>
     );
 
+  const filteredExercises = selectedExercise
+    ? plannedExercises.filter((exercise) => exercise.exerciseName === selectedExercise)
+    : plannedExercises;
+
   return (
     <Container
       maxWidth="md"
@@ -93,6 +109,18 @@ function PlannedExerciseList() {
         <Typography variant="h4" component="h1" gutterBottom>
           Planned Exercises
         </Typography>
+        <Autocomplete
+          options={exerciseNames}
+          value={selectedExercise}
+          getOptionLabel={(option) => (option ? option : '')}
+          onChange={(event, newValue) => {
+            setSelectedExercise(newValue || '');
+          }}
+          renderInput={(params) => (
+            <TextField {...params} label="Search Exercises" variant="outlined" />
+          )}
+          sx={{ mb: 1 }}
+        />
         <Button
           type="submit"
           color="primary"
@@ -113,7 +141,7 @@ function PlannedExerciseList() {
           <Typography variant="body1">No planned exercises found</Typography>
         ) : (
           <List>
-            {plannedExercises.map((exercise) => (
+            {filteredExercises.map((exercise) => (
               <React.Fragment key={exercise.id}>
                 <ListItem
                   secondaryAction={
