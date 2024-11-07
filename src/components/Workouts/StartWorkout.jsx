@@ -166,6 +166,7 @@ function StartWorkout() {
                           }
                           aria-label="Reps"
                           min={0}
+                          max={999}
                           step={1}
                           endAdornment={<InputAdornment></InputAdornment>}
                         />
@@ -181,6 +182,7 @@ function StartWorkout() {
                           }
                           aria-label="Weight"
                           min={0}
+                          max={999}
                           step={0.5}
                           endAdornment={<InputAdornment>kg</InputAdornment>}
                         />

@@ -17,8 +17,8 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ContentCopy } from '@mui/icons-material';
 
-// TODO add the ability to edit a planned exercise, also autocomplete search might be necessary then
 function PlannedExerciseList() {
   const [plannedExercises, setPlannedExercises] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,6 +29,10 @@ function PlannedExerciseList() {
   const handleAddExercise = () => {
     navigate('/add-planned');
   };
+
+  const handleCopyExercise = ( id ) => {
+    navigate(`/add-planned/${id}`);
+  }
 
   const handleDeleteExercise = async (id) => {
     try {
@@ -113,11 +117,18 @@ function PlannedExerciseList() {
               <React.Fragment key={exercise.id}>
                 <ListItem
                   secondaryAction={
+                    <Box>
+                    <IconButton
+                      edge="start"
+                      onClick={() => handleCopyExercise(exercise.id)}>
+                      <ContentCopy />
+                    </IconButton>
                     <IconButton
                       edge="end"
                       onClick={() => handleDeleteExercise(exercise.id)}>
                       <DeleteIcon />
                     </IconButton>
+                    </Box>
                   }>
                   <ListItemText
                     primary={
@@ -128,6 +139,7 @@ function PlannedExerciseList() {
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
+                          pr: 5,
                         }}>
                         {exercise.exerciseName}
                       </Typography>
@@ -139,6 +151,7 @@ function PlannedExerciseList() {
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
+                        pr: 5,
                       },
                     }}
                   />

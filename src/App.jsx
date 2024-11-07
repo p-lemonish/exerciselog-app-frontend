@@ -35,6 +35,10 @@ function App() {
           element={<PrivateRoute element={<AddPlannedExercise />} />}
         />
         <Route
+          path="/add-planned/:id"
+          element={<PrivateRoute element={<AddPlannedExercise />} />}
+        />
+        <Route
           path="/workouts"
           element={<PrivateRoute element={<Workouts />} />}
         />
