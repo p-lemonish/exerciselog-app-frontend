@@ -96,8 +96,7 @@ function StartWorkout() {
     setFormData({ ...formData, exercises: updatedExercises });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     setError('');
     try {
       const workoutLog = {

@@ -14,6 +14,7 @@ function BottomNavBar() {
     '/planned-exercises': 0,
     '/add-planned': 0,
     '/workouts': 1,
+    '/workouts/delete-planned': 1,
     '/add-workout': 1,
     '/start-workout': 1,
     '/exercise-logs': 2,
