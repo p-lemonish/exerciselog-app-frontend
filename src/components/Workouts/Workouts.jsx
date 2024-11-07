@@ -92,6 +92,10 @@ function Workouts() {
       </Container>
     );
 
+  const filteredWorkouts = selectedWorkout
+    ? plannedWorkouts.filter((workout) => workout.workoutName === selectedWorkout)
+    : plannedWorkouts;
+
   return (
     <Container
       maxWidth="md"
@@ -106,6 +110,18 @@ function Workouts() {
         <Typography variant="h4" component="h1" gutterBottom>
           Planned Workouts
         </Typography>
+        <Autocomplete
+          options={workoutNames}
+          value={selectedWorkout}
+          getOptionLabel={(option) => (option ? option : '')}
+          onChange={(event, newValue) => {
+            setSelectedWorkout(newValue || '');
+          }}
+          renderInput={(params) => (
+            <TextField {...params} label="Search Workouts" variant="outlined" />
+          )}
+          sx={{ mb: 1 }}
+        />
         <Button
           type="submit"
           color="primary"
@@ -129,7 +145,7 @@ function Workouts() {
           <Typography variant="body1">No planned workouts found</Typography>
         ) : (
           <List sx={{ width: '100%' }}>
-            {plannedWorkouts.map((workout) => (
+            {filteredWorkouts.map((workout) => (
               <React.Fragment key={workout.id}>
                 <ListItem
                   secondaryAction={
