@@ -19,6 +19,7 @@ import ExerciseLogRow from './ExerciseLogRow';
 import LoadingScreen from '../LoadingScreen';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
+import PageLayout from '../Layout/PageLayout';
 
 function ExerciseLogs() {
   const { logout } = useContext(AuthContext);
@@ -69,41 +70,35 @@ function ExerciseLogs() {
     : exerciseLogs;
 
   return (
-    <Container
-      maxWidth="md"
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        paddingBottom: '64px',
-        paddingTop: '20px',
-      }}>
-      <Box sx={{ flexShrink: 0 }}>
-        <Typography variant="h4" gutterBottom>
-          Exercise Logs
-        </Typography>
-        <Autocomplete
-          options={exerciseNames}
-          value={selectedExercise}
-          getOptionLabel={(option) => (option ? option : '')}
-          onChange={(event, newValue) => {
-            setSelectedExercise(newValue || '');
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search Exercises"
-              variant="outlined"
-            />
+    <PageLayout
+      header={
+        <>
+          <Typography variant="h4" gutterBottom>
+            Exercise Logs
+          </Typography>
+          <Autocomplete
+            options={exerciseNames}
+            value={selectedExercise}
+            getOptionLabel={(option) => (option ? option : '')}
+            onChange={(event, newValue) => {
+              setSelectedExercise(newValue || '');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search Exercises"
+                variant="outlined"
+              />
+            )}
+            sx={{ mb: 1 }}
+          />
+          {error && (
+            <Alert severity="error" onClose={() => setError(null)}>
+              {error}
+            </Alert>
           )}
-          sx={{ mb: 1 }}
-        />
-        {error && (
-          <Alert severity="error" onClose={() => setError(null)}>
-            {error}
-          </Alert>
-        )}
-      </Box>
+        </>
+      }>
       <Paper sx={{ width: '100%', overflowX: 'auto' }}>
         <Table>
           <TableHead>
@@ -142,7 +137,7 @@ function ExerciseLogs() {
           )}
         </Table>
       </Paper>
-    </Container>
+    </PageLayout>
   );
 }
 export default ExerciseLogs;

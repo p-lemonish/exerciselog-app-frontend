@@ -7,7 +7,6 @@ import {
   List,
   Alert,
   Button,
-  Container,
   TextField,
   Typography,
   ListItem,
@@ -17,6 +16,7 @@ import {
   Autocomplete,
 } from '@mui/material';
 import { AuthContext } from '../../context/AuthContext';
+import PageLayout from '../Layout/PageLayout';
 
 function AddWorkout() {
   const params = useParams();
@@ -141,155 +141,155 @@ function AddWorkout() {
   if (loading) return <LoadingScreen />;
 
   return (
-    <Container
-      maxWidth="md"
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        paddingBottom: '64px',
-        paddingTop: '20px',
-      }}>
-      <Box sx={{ flexShrink: 0 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Plan your workout
-        </Typography>
-        <TextField
-          label="Workout Name"
-          name="workoutName"
-          value={workoutName}
-          onChange={onChange}
-          type="workoutName"
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-          }}
-          fullWidth
-          sx={{ mb: 1 }}
-          required
-        />
-        <TextField
-          label="Planned Date"
-          name="plannedDate"
-          value={plannedDate}
-          onChange={onChange}
-          type="date"
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-          }}
-          fullWidth
-          sx={{ mb: 1 }}
-          required
-        />
-        <Autocomplete
-          options={plannedExercises.filter(
-            (exercise) => !selectedExerciseIds.includes(exercise.id)
-          )}
-          getOptionLabel={(option) =>
-            `${option.exerciseName}: ${option.plannedSets}x${option.plannedReps}@${option.plannedWeight}kg`
-          }
-          inputValue={inputValue}
-          value={autocompleteValue}
-          onInputChange={(event, newInputValue) => {
-            setInputValue(newInputValue);
-          }}
-          onChange={(event, newValue) => {
-            if (newValue) {
-              if (!selectedExerciseIds.includes(newValue.id)) {
-                setFormData({
-                  ...formData,
-                  selectedExerciseIds: [...selectedExerciseIds, newValue.id],
-                });
-              }
-              setAutocompleteValue(null);
+    <PageLayout
+      header={
+        <>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Plan your workout
+          </Typography>
+          <TextField
+            label="Workout Name"
+            name="workoutName"
+            value={workoutName}
+            onChange={onChange}
+            type="workoutName"
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+            }}
+            fullWidth
+            sx={{ mb: 1 }}
+            required
+          />
+          <TextField
+            label="Planned Date"
+            name="plannedDate"
+            value={plannedDate}
+            onChange={onChange}
+            type="date"
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+            }}
+            fullWidth
+            sx={{ mb: 1 }}
+            required
+          />
+          <Autocomplete
+            options={plannedExercises.filter(
+              (exercise) => !selectedExerciseIds.includes(exercise.id)
+            )}
+            getOptionLabel={(option) =>
+              `${option.exerciseName}: ${option.plannedSets}x${option.plannedReps}@${option.plannedWeight}kg`
             }
-            setInputValue('');
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search Exercises"
-              variant="outlined"
-            />
-          )}
-          renderTags={() => null}
-          sx={{ mb: 1 }}
-        />
-        {error && <Alert severity="error">{error}</Alert>}
-        {successMessage && <Alert severity="success">{successMessage}</Alert>}
-      </Box>
-      <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-        <form style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          {plannedExercises.length === 0 ? (
-            <Typography variant="body1">No planned exercises found</Typography>
-          ) : (
-            <List>
-              {plannedExercises.map((exercise) => {
-                const labelId = `checkbox-list-label-${exercise.id}`;
+            inputValue={inputValue}
+            value={autocompleteValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+            onChange={(event, newValue) => {
+              if (newValue) {
+                if (!selectedExerciseIds.includes(newValue.id)) {
+                  setFormData({
+                    ...formData,
+                    selectedExerciseIds: [...selectedExerciseIds, newValue.id],
+                  });
+                }
+                setAutocompleteValue(null);
+              }
+              setInputValue('');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search Exercises"
+                variant="outlined"
+              />
+            )}
+            renderTags={() => null}
+            sx={{ mb: 1 }}
+          />
+          {error && <Alert severity="error">{error}</Alert>}
+          {successMessage && <Alert severity="success">{successMessage}</Alert>}
+        </>
+      }>
+      {
+        <>
+          <form style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            {plannedExercises.length === 0 ? (
+              <Typography variant="body1">
+                No planned exercises found
+              </Typography>
+            ) : (
+              <List>
+                {plannedExercises.map((exercise) => {
+                  const labelId = `checkbox-list-label-${exercise.id}`;
 
-                return (
-                  <React.Fragment key={exercise.id}>
-                    <ListItem dense onClick={handleExerciseToggle(exercise.id)}>
-                      <Checkbox
-                        edge="start"
-                        checked={selectedExerciseIds.includes(exercise.id)}
-                        tabIndex={-1}
-                        disableRipple
-                        inputProps={{ 'aria-labelledby': labelId }}
-                      />
-                      <ListItemText
-                        primary={
-                          <Typography
-                            variant="body1"
-                            noWrap
-                            sx={{
+                  return (
+                    <React.Fragment key={exercise.id}>
+                      <ListItem
+                        dense
+                        onClick={handleExerciseToggle(exercise.id)}>
+                        <Checkbox
+                          edge="start"
+                          checked={selectedExerciseIds.includes(exercise.id)}
+                          tabIndex={-1}
+                          disableRipple
+                          inputProps={{ 'aria-labelledby': labelId }}
+                        />
+                        <ListItemText
+                          primary={
+                            <Typography
+                              variant="body1"
+                              noWrap
+                              sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}>
+                              {exercise.exerciseName}
+                            </Typography>
+                          }
+                          secondary={`${exercise.plannedSets}x${exercise.plannedReps}@${exercise.plannedWeight}kg`}
+                          secondaryTypographyProps={{
+                            noWrap: true,
+                            sx: {
                               overflow: 'hidden',
                               textOverflow: 'ellipsis',
                               whiteSpace: 'nowrap',
-                            }}>
-                            {exercise.exerciseName}
-                          </Typography>
-                        }
-                        secondary={`${exercise.plannedSets}x${exercise.plannedReps}@${exercise.plannedWeight}kg`}
-                        secondaryTypographyProps={{
-                          noWrap: true,
-                          sx: {
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                          },
-                        }}
-                      />
-                    </ListItem>
-                    <Divider />
-                  </React.Fragment>
-                );
-              })}
-            </List>
-          )}
-        </form>
-      </Box>
-      <Box sx={{ mt: 1 }}>
-        <Button
-          onClick={handleSubmit}
-          color="primary"
-          variant="outlined"
-          fullWidth>
-          Save
-        </Button>
-        <Button
-          type="cancel"
-          color="primary"
-          variant="outlined"
-          onClick={handleCancel}
-          fullWidth>
-          Cancel
-        </Button>
-      </Box>
-    </Container>
+                            },
+                          }}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  );
+                })}
+              </List>
+            )}
+          </form>
+          <Box sx={{ mt: 1 }}>
+            <Button
+              onClick={handleSubmit}
+              color="primary"
+              variant="outlined"
+              fullWidth>
+              Save
+            </Button>
+            <Button
+              type="cancel"
+              color="primary"
+              variant="outlined"
+              onClick={handleCancel}
+              fullWidth>
+              Cancel
+            </Button>
+          </Box>
+        </>
+      }
+    </PageLayout>
   );
 }
 

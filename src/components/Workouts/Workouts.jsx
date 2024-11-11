@@ -21,6 +21,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
+import PageLayout from '../Layout/PageLayout';
 
 function Workouts() {
   const [plannedWorkouts, setPlannedWorkouts] = useState([]);
@@ -94,101 +95,96 @@ function Workouts() {
     : plannedWorkouts;
 
   return (
-    <Container
-      maxWidth="md"
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        paddingBottom: '64px',
-        paddingTop: '20px',
-      }}>
-      <Box sx={{ flexShrink: 0 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Planned Workouts
-        </Typography>
-        <Autocomplete
-          options={workoutNames}
-          value={selectedWorkout}
-          getOptionLabel={(option) => (option ? option : '')}
-          onChange={(event, newValue) => {
-            setSelectedWorkout(newValue || '');
-          }}
-          renderInput={(params) => (
-            <TextField {...params} label="Search Workouts" variant="outlined" />
+    <PageLayout
+      header={
+        <>
+          <Typography variant="h4" component="h1" gutterBottom>
+            Planned Workouts
+          </Typography>
+          <Autocomplete
+            options={workoutNames}
+            value={selectedWorkout}
+            getOptionLabel={(option) => (option ? option : '')}
+            onChange={(event, newValue) => {
+              setSelectedWorkout(newValue || '');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search Workouts"
+                variant="outlined"
+              />
+            )}
+            sx={{ mb: 1 }}
+          />
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleAddWorkout}
+            fullWidth>
+            Plan a New Workout
+          </Button>
+          <Typography variant="body1" sx={{ mt: 2 }}>
+            Tap on a workout to start it.
+          </Typography>
+          {error && (
+            <Alert severity="error" onClose={() => setError(null)}>
+              {error}
+            </Alert>
           )}
-          sx={{ mb: 1 }}
-        />
-        <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAddWorkout}
-          fullWidth>
-          Plan a New Workout
-        </Button>
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          Tap on a workout to start it.
-        </Typography>
-        {error && (
-          <Alert severity="error" onClose={() => setError(null)}>
-            {error}
-          </Alert>
-        )}
-      </Box>
-      <Box sx={{ flexGrow: 1, overflowY: 'auto', mt: 1, mb: 1 }}>
-        {plannedWorkouts.length === 0 ? (
-          <Typography variant="body1">No planned workouts found</Typography>
-        ) : (
-          <List sx={{ width: '100%' }}>
-            {filteredWorkouts.map((workout) => (
-              <React.Fragment key={workout.id}>
-                <ListItem
-                  secondaryAction={
-                    <Box>
-                      <IconButton
-                        edge="start"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditWorkout(workout.id);
-                        }}>
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        edge="end"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteWorkout(workout.id);
-                        }}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  }>
-                  <ListItemButton
-                    onClick={() => handleStartWorkout(workout.id)}>
-                    <ListItemText
-                      primary={workout.workoutName}
-                      primaryTypographyProps={{
-                        noWrap: true,
-                        sx: {
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          pr: 5,
-                        },
-                      }}
-                      secondary={workout.plannedDate}
-                    />
-                  </ListItemButton>
-                </ListItem>
-                <Divider />
-              </React.Fragment>
-            ))}
-          </List>
-        )}
-      </Box>
-    </Container>
+        </>
+      }>
+      {plannedWorkouts.length === 0 ? (
+        <Typography variant="body1">No planned workouts found</Typography>
+      ) : (
+        <List sx={{ width: '100%' }}>
+          {filteredWorkouts.map((workout) => (
+            <React.Fragment key={workout.id}>
+              <ListItem
+                secondaryAction={
+                  <Box>
+                    <IconButton
+                      edge="start"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditWorkout(workout.id);
+                      }}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteWorkout(workout.id);
+                      }}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
+                }>
+                <ListItemButton onClick={() => handleStartWorkout(workout.id)}>
+                  <ListItemText
+                    primary={workout.workoutName}
+                    primaryTypographyProps={{
+                      noWrap: true,
+                      sx: {
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        pr: 5,
+                      },
+                    }}
+                    secondary={workout.plannedDate}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+            </React.Fragment>
+          ))}
+        </List>
+      )}
+    </PageLayout>
   );
 }
 export default Workouts;
