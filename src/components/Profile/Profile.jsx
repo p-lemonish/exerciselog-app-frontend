@@ -31,21 +31,22 @@ function Profile() {
   const [passwordError, setPasswordError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await api.get('/profile');
-        setUser(response.data);
-      } catch (err) {
-        console.error('Error fetching user profile:', err);
-        if (err.response && err.response.status === 401) {
-          logout();
-          navigate('/login');
-        }
-      } finally {
-        setLoading(false);
+  const fetchUserProfile = async () => {
+    try {
+      const response = await api.get('/profile');
+      setUser(response.data);
+    } catch (err) {
+      console.error('Error fetching user profile:', err);
+      if (err.response && err.response.status === 401) {
+        logout();
+        navigate('/login');
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchUserProfile();
   }, [logout, navigate]);
 

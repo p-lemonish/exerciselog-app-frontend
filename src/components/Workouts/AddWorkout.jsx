@@ -88,41 +88,42 @@ function AddWorkout() {
     }
   };
 
-  useEffect(() => {
-    const fetchPlannedExercises = async () => {
-      try {
-        const response = await api.get('/planned');
-        setPlannedExercises(response.data);
+  const fetchPlannedExercises = async () => {
+    try {
+      const response = await api.get('/planned');
+      setPlannedExercises(response.data);
 
-        if (isEditMode) {
-          const workoutResponse = await api.get(`/workouts/${idFromParams}`);
-          const workoutData = workoutResponse.data;
+      if (isEditMode) {
+        const workoutResponse = await api.get(`/workouts/${idFromParams}`);
+        const workoutData = workoutResponse.data;
 
-          setFormData({
-            id: workoutData.id,
-            workoutName: workoutData.workoutName,
-            selectedExerciseIds: workoutData.selectedExerciseIds,
-            plannedDate: workoutData.plannedDate,
-          });
-        }
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        if (err.response) {
-          if (err.response.status === 401) {
-            logout();
-            navigate('/login');
-          } else if (err.response.status === 404) {
-            setError('Workout not found');
-          } else {
-            setError('Failed to load data');
-          }
-        } else {
-          setError('An error occurred while fetching data');
-        }
-      } finally {
-        setLoading(false);
+        setFormData({
+          id: workoutData.id,
+          workoutName: workoutData.workoutName,
+          selectedExerciseIds: workoutData.selectedExerciseIds,
+          plannedDate: workoutData.plannedDate,
+        });
       }
-    };
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      if (err.response) {
+        if (err.response.status === 401) {
+          logout();
+          navigate('/login');
+        } else if (err.response.status === 404) {
+          setError('Workout not found');
+        } else {
+          setError('Failed to load data');
+        }
+      } else {
+        setError('An error occurred while fetching data');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchPlannedExercises();
   }, [authState.token, logout, navigate]);
 

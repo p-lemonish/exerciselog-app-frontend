@@ -45,41 +45,42 @@ function StartWorkout() {
         `
   );
 
-  useEffect(() => {
-    const fetchWorkout = async () => {
-      try {
-        const workoutResponse = await api.get(`/workouts/start/${id}`);
-        const workoutData = workoutResponse.data;
+  const fetchWorkout = async () => {
+    try {
+      const workoutResponse = await api.get(`/workouts/start/${id}`);
+      const workoutData = workoutResponse.data;
 
-        setFormData({
-          workoutName: workoutData.workoutName,
-          plannedDate: workoutData.plannedDate,
-          exercises: workoutData.exercises.map((exercise) => ({
-            ...exercise,
-            currentReps: exercise.setLogDtoList.map((set) => set.reps),
-            currentWeight: exercise.setLogDtoList.map((set) => set.weight),
-            exerciseNotes: '',
-          })),
-          workoutNotes: '',
-        });
-      } catch (err) {
-        console.error('Error fetching workout', err);
-        if (err.response) {
-          if (err.response.status === 401) {
-            logout();
-            navigate('/login');
-          } else if (err.response.status === 404) {
-            setError('Workout not found');
-          } else {
-            setError('Failed to load workout data');
-          }
+      setFormData({
+        workoutName: workoutData.workoutName,
+        plannedDate: workoutData.plannedDate,
+        exercises: workoutData.exercises.map((exercise) => ({
+          ...exercise,
+          currentReps: exercise.setLogDtoList.map((set) => set.reps),
+          currentWeight: exercise.setLogDtoList.map((set) => set.weight),
+          exerciseNotes: '',
+        })),
+        workoutNotes: '',
+      });
+    } catch (err) {
+      console.error('Error fetching workout', err);
+      if (err.response) {
+        if (err.response.status === 401) {
+          logout();
+          navigate('/login');
+        } else if (err.response.status === 404) {
+          setError('Workout not found');
         } else {
           setError('Failed to load workout data');
         }
-      } finally {
-        setLoading(false);
+      } else {
+        setError('Failed to load workout data');
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchWorkout();
   }, [id, authState.token, logout, navigate]);
 
