@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
+import LoadingScreen from '../LoadingScreen';
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -24,7 +25,7 @@ import { ContentCopy } from '@mui/icons-material';
 function PlannedExerciseList() {
   const [plannedExercises, setPlannedExercises] = useState([]);
   const [exerciseNames, setExerciseNames] = useState([]);
-  const [selectedExercise, setSelectedExercise] = useState("");
+  const [selectedExercise, setSelectedExercise] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
   const { authState, logout } = useContext(AuthContext);
@@ -34,9 +35,9 @@ function PlannedExerciseList() {
     navigate('/add-planned');
   };
 
-  const handleCopyExercise = ( id ) => {
+  const handleCopyExercise = (id) => {
     navigate(`/add-planned/${id}`);
-  }
+  };
 
   const handleDeleteExercise = async (id) => {
     try {
@@ -84,24 +85,12 @@ function PlannedExerciseList() {
     fetchPlannedExercises();
   }, [authState.token, logout, navigate]);
 
-  if (loading)
-    return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '64px',
-          paddingTop: '20px',
-        }}>
-        <CircularProgress />
-      </Container>
-    );
+  if (loading) return <LoadingScreen />;
 
   const filteredExercises = selectedExercise
-    ? plannedExercises.filter((exercise) => exercise.exerciseName === selectedExercise)
+    ? plannedExercises.filter(
+        (exercise) => exercise.exerciseName === selectedExercise
+      )
     : plannedExercises;
 
   return (
@@ -126,7 +115,11 @@ function PlannedExerciseList() {
             setSelectedExercise(newValue || '');
           }}
           renderInput={(params) => (
-            <TextField {...params} label="Search Exercises" variant="outlined" />
+            <TextField
+              {...params}
+              label="Search Exercises"
+              variant="outlined"
+            />
           )}
           sx={{ mb: 1 }}
         />
@@ -155,16 +148,16 @@ function PlannedExerciseList() {
                 <ListItem
                   secondaryAction={
                     <Box>
-                    <IconButton
-                      edge="start"
-                      onClick={() => handleCopyExercise(exercise.id)}>
-                      <ContentCopy />
-                    </IconButton>
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleDeleteExercise(exercise.id)}>
-                      <DeleteIcon />
-                    </IconButton>
+                      <IconButton
+                        edge="start"
+                        onClick={() => handleCopyExercise(exercise.id)}>
+                        <ContentCopy />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        onClick={() => handleDeleteExercise(exercise.id)}>
+                        <DeleteIcon />
+                      </IconButton>
                     </Box>
                   }>
                   <ListItemText

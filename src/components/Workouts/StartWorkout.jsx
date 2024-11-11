@@ -3,12 +3,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { styled } from '@mui/system';
 import api from '../../services/api';
+import LoadingScreen from '../LoadingScreen';
 import NumberInput from '../NumberInput';
 import {
   Alert,
   Box,
   Button,
-  CircularProgress,
   Container,
   List,
   ListItem,
@@ -119,21 +119,7 @@ function StartWorkout() {
     }
   };
 
-  if (loading)
-    return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '64px',
-          paddingTop: '20px',
-        }}>
-        <CircularProgress />
-      </Container>
-    );
+  if (loading) return <LoadingScreen />;
 
   return (
     <Container
@@ -146,112 +132,127 @@ function StartWorkout() {
         paddingTop: '20px',
       }}>
       <Box sx={{ flexShrink: 0 }}>
-      <Typography variant="h5" noWrap gutterBottom sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "pre-line" }}>
-        Start workout:{'\n'}
-        {workoutName}{"\n"}
-        - {plannedDate}{"\n"}
-      </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+        <Typography
+          variant="h5"
+          noWrap
+          gutterBottom
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'pre-line',
+          }}>
+          Start workout:{'\n'}
+          {workoutName}
+          {'\n'}- {plannedDate}
+          {'\n'}
+        </Typography>
+        {error && <Alert severity="error">{error}</Alert>}
       </Box>
       <Box sx={{ flexGrow: 1, overflowY: 'auto', mt: 1, mb: 1 }}>
-      <form>
-        {exercises.length === 0 ? (
-          <Typography variant="body1">No exercises found</Typography>
-        ) : (
-          <List>
-            {exercises.map((exercise, exerciseIndex) => (
-              <React.Fragment key={exercise.exerciseId}>
-                <Typography variant="h6" sx={{ mt: 2 }}>{exercise.exerciseName}</Typography>
-                <List>
-                  {exercise.setLogDtoList.map((set, setIndex) => (
-                    <ListItem key={set.setNumber}>
-                      <ListItemText
-                        primary={`Set ${set.setNumber}`}
-                        secondary={`${set.reps} reps @ ${set.weight}kg`}
-                      />
-                      <Box>
-                        <NumberInput
-                          value={exercise.currentReps[setIndex]}
-                          onChange={(event, newValue) =>
-                            handleSetChange(
-                              exerciseIndex,
-                              setIndex,
-                              'reps',
-                              newValue
-                            )
-                          }
-                          aria-label="Reps"
-                          min={0}
-                          max={999}
-                          step={1}
-                          endAdornment={<InputAdornment></InputAdornment>}
+        <form>
+          {exercises.length === 0 ? (
+            <Typography variant="body1">No exercises found</Typography>
+          ) : (
+            <List>
+              {exercises.map((exercise, exerciseIndex) => (
+                <React.Fragment key={exercise.exerciseId}>
+                  <Typography variant="h6" sx={{ mt: 2 }}>
+                    {exercise.exerciseName}
+                  </Typography>
+                  <List>
+                    {exercise.setLogDtoList.map((set, setIndex) => (
+                      <ListItem key={set.setNumber}>
+                        <ListItemText
+                          primary={`Set ${set.setNumber}`}
+                          secondary={`${set.reps} reps @ ${set.weight}kg`}
                         />
-                        <NumberInput
-                          value={exercise.currentWeight[setIndex]}
-                          onChange={(event, newValue) =>
-                            handleSetChange(
-                              exerciseIndex,
-                              setIndex,
-                              'weight',
-                              newValue
-                            )
-                          }
-                          aria-label="Weight"
-                          min={0}
-                          max={999}
-                          step={0.5}
-                          endAdornment={<InputAdornment>kg</InputAdornment>}
-                        />
-                      </Box>
-                    </ListItem>
-                  ))}
-                </List>
-                <TextField
-                  label="Exercise Notes (optional)"
-                  name="exerciseNotes"
-                  value={exercise.exerciseNotes}
-                  onChange={(e) => {
-                    const updatedExercises = [...formData.exercises];
-                    updatedExercises[exerciseIndex].exerciseNotes =
-                      e.target.value;
-                    setFormData({ ...formData, exercises: updatedExercises });
-                  }}
-                  multiline
-                  rows={2}
-                  fullWidth
-                  variant="outlined"
-                />
-              </React.Fragment>
-            ))}
-          </List>
-        )}
-        <TextField
-          label="Workout Notes (optional)"
-          name="workoutNotes"
-          value={formData.workoutNotes}
-          onChange={(e) => {
-            setFormData({ ...formData, workoutNotes: e.target.value });
-          }}
-          multiline
-          rows={2}
-          fullWidth
-          variant="outlined"
-        />
-      </form>
-      </Box>
-        <Box sx={{ mt: 2 }}>
-          <Button onClick={() => onSubmit()} color="primary" variant="outlined" fullWidth>
-            Complete workout
-          </Button>
-          <Button
-            type="cancel"
-            color="primary"
+                        <Box>
+                          <NumberInput
+                            value={exercise.currentReps[setIndex]}
+                            onChange={(event, newValue) =>
+                              handleSetChange(
+                                exerciseIndex,
+                                setIndex,
+                                'reps',
+                                newValue
+                              )
+                            }
+                            aria-label="Reps"
+                            min={0}
+                            max={999}
+                            step={1}
+                            endAdornment={<InputAdornment></InputAdornment>}
+                          />
+                          <NumberInput
+                            value={exercise.currentWeight[setIndex]}
+                            onChange={(event, newValue) =>
+                              handleSetChange(
+                                exerciseIndex,
+                                setIndex,
+                                'weight',
+                                newValue
+                              )
+                            }
+                            aria-label="Weight"
+                            min={0}
+                            max={999}
+                            step={0.5}
+                            endAdornment={<InputAdornment>kg</InputAdornment>}
+                          />
+                        </Box>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <TextField
+                    label="Exercise Notes (optional)"
+                    name="exerciseNotes"
+                    value={exercise.exerciseNotes}
+                    onChange={(e) => {
+                      const updatedExercises = [...formData.exercises];
+                      updatedExercises[exerciseIndex].exerciseNotes =
+                        e.target.value;
+                      setFormData({ ...formData, exercises: updatedExercises });
+                    }}
+                    multiline
+                    rows={2}
+                    fullWidth
+                    variant="outlined"
+                  />
+                </React.Fragment>
+              ))}
+            </List>
+          )}
+          <TextField
+            label="Workout Notes (optional)"
+            name="workoutNotes"
+            value={formData.workoutNotes}
+            onChange={(e) => {
+              setFormData({ ...formData, workoutNotes: e.target.value });
+            }}
+            multiline
+            rows={2}
+            fullWidth
             variant="outlined"
-            onClick={handleCancel}
-            fullWidth>
-            Cancel
-          </Button>
-        </Box>
+          />
+        </form>
+      </Box>
+      <Box sx={{ mt: 2 }}>
+        <Button
+          onClick={() => onSubmit()}
+          color="primary"
+          variant="outlined"
+          fullWidth>
+          Complete workout
+        </Button>
+        <Button
+          type="cancel"
+          color="primary"
+          variant="outlined"
+          onClick={handleCancel}
+          fullWidth>
+          Cancel
+        </Button>
+      </Box>
     </Container>
   );
 }

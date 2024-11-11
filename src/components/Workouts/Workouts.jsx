@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Box,
-  CircularProgress,
   Container,
   Typography,
   Button,
@@ -21,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import LoadingScreen from '../LoadingScreen';
 
 function Workouts() {
   const [plannedWorkouts, setPlannedWorkouts] = useState([]);
@@ -85,21 +85,7 @@ function Workouts() {
     fetchPlannedWorkouts();
   }, [authState.token, logout, navigate]);
 
-  if (loading)
-    return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '64px',
-          paddingTop: '20px',
-        }}>
-        <CircularProgress />
-      </Container>
-    );
+  if (loading) return <LoadingScreen />;
 
   const filteredWorkouts = selectedWorkout
     ? plannedWorkouts.filter(

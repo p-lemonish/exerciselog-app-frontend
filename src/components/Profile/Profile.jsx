@@ -6,10 +6,10 @@ import {
   Button,
   Alert,
   Box,
-  CircularProgress,
 } from '@mui/material';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
+import LoadingScreen from '../LoadingScreen';
 import { useNavigate } from 'react-router-dom';
 
 function Profile() {
@@ -43,7 +43,7 @@ function Profile() {
           navigate('/login');
         }
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
     fetchUserProfile();
@@ -84,21 +84,7 @@ function Profile() {
     }
   };
 
-  if (loading)
-    return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '64px',
-          paddingTop: '20px',
-        }}>
-        <CircularProgress />
-      </Container>
-    );
+  if (loading) return <LoadingScreen />;
 
   return (
     <Container
@@ -185,17 +171,17 @@ function Profile() {
         </form>
       </Box>
       <Box sx={{ flexGrow: 1, overflowY: 'auto', mb: 2 }}>
-          <Button
-            onClick={() => {
-              logout()
-              navigate("/login")
-            }}
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 2 }}>
-            Logout
-          </Button>
+        <Button
+          onClick={() => {
+            logout();
+            navigate('/login');
+          }}
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}>
+          Logout
+        </Button>
       </Box>
     </Container>
   );

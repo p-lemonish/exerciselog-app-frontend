@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import ExerciseLogRow from './ExerciseLogRow';
+import LoadingScreen from '../LoadingScreen';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 
@@ -61,21 +62,7 @@ function ExerciseLogs() {
     }
   };
 
-  if (loading)
-    return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '64px',
-          paddingTop: '20px',
-        }}>
-        <CircularProgress />
-      </Container>
-    );
+  if (loading) return <LoadingScreen />;
 
   const filteredLogs = selectedExercise
     ? exerciseLogs.filter((log) => log.exerciseName === selectedExercise)
@@ -103,7 +90,11 @@ function ExerciseLogs() {
             setSelectedExercise(newValue || '');
           }}
           renderInput={(params) => (
-            <TextField {...params} label="Search Exercises" variant="outlined" />
+            <TextField
+              {...params}
+              label="Search Exercises"
+              variant="outlined"
+            />
           )}
           sx={{ mb: 1 }}
         />
@@ -118,10 +109,10 @@ function ExerciseLogs() {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell padding='none'>Date</TableCell>
-              <TableCell padding='normal'>Name</TableCell>
-              <TableCell padding='none'>Reps</TableCell>
-              <TableCell padding='none'>Weight</TableCell>
+              <TableCell padding="none">Date</TableCell>
+              <TableCell padding="normal">Name</TableCell>
+              <TableCell padding="none">Reps</TableCell>
+              <TableCell padding="none">Weight</TableCell>
             </TableRow>
           </TableHead>
           {exerciseLogs.length === 0 ? (

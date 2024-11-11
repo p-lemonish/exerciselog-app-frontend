@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../services/api';
+import LoadingScreen from '../LoadingScreen';
 import {
   Alert,
   Box,
   Button,
-  CircularProgress,
   Container,
   InputAdornment,
   List,
@@ -43,7 +43,7 @@ function AddPlannedExercise() {
 
   useEffect(() => {
     if (id) {
-      setLoading(true)
+      setLoading(true);
       handleCopy();
     }
   }, [id, logout, navigate]);
@@ -62,7 +62,7 @@ function AddPlannedExercise() {
     } catch (err) {
       console.error('Error fetching exercise', err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -112,21 +112,7 @@ function AddPlannedExercise() {
     }
   };
 
-  if (loading)
-    return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '64px',
-          paddingTop: '20px',
-        }}>
-        <CircularProgress />
-      </Container>
-    );
+  if (loading) return <LoadingScreen />;
 
   return (
     <Container maxWidth="sm" sx={{ paddingTop: '20px' }}>
@@ -163,7 +149,7 @@ function AddPlannedExercise() {
           fullWidth
           sx={{ mb: 2 }}
         />
-        <List sx={{ marginRight: "-15px", marginLeft: "-15px", mb: 2 }}>
+        <List sx={{ marginRight: '-15px', marginLeft: '-15px', mb: 2 }}>
           <Box>
             <ListItem>
               <ListItemText variant="body1">Planned Sets:</ListItemText>
@@ -176,7 +162,11 @@ function AddPlannedExercise() {
                 min={0}
                 max={999}
                 step={1}
-                endAdornment={<InputAdornment position='end'>&nbsp;&nbsp;&nbsp;&nbsp;</InputAdornment>}
+                endAdornment={
+                  <InputAdornment position="end">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                  </InputAdornment>
+                }
               />
             </ListItem>
             <ListItem>
@@ -190,7 +180,11 @@ function AddPlannedExercise() {
                 min={0}
                 max={999}
                 step={1}
-                endAdornment={<InputAdornment position='end'>&nbsp;&nbsp;&nbsp;&nbsp;</InputAdornment>}
+                endAdornment={
+                  <InputAdornment position="end">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                  </InputAdornment>
+                }
               />
             </ListItem>
             <ListItem>
@@ -204,7 +198,9 @@ function AddPlannedExercise() {
                 min={0}
                 max={999}
                 step={0.5}
-                endAdornment={<InputAdornment position='end'>kg</InputAdornment>}
+                endAdornment={
+                  <InputAdornment position="end">kg</InputAdornment>
+                }
               />
             </ListItem>
           </Box>

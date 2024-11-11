@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../services/api';
+import LoadingScreen from '../LoadingScreen';
 import {
   Box,
-  CircularProgress,
   List,
   Alert,
   Button,
@@ -138,21 +138,7 @@ function AddWorkout() {
     setFormData({ ...formData, selectedExerciseIds: newSelectedExercises });
   };
 
-  if (loading)
-    return (
-      <Container
-        maxWidth="md"
-        sx={{
-          display: 'flex',
-          height: '100vh',
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingBottom: '64px',
-          paddingTop: '20px',
-        }}>
-        <CircularProgress />
-      </Container>
-    );
+  if (loading) return <LoadingScreen />;
 
   return (
     <Container
@@ -236,8 +222,7 @@ function AddWorkout() {
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
       </Box>
       <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-        <form
-          style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <form style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
           {plannedExercises.length === 0 ? (
             <Typography variant="body1">No planned exercises found</Typography>
           ) : (
@@ -288,7 +273,11 @@ function AddWorkout() {
         </form>
       </Box>
       <Box sx={{ mt: 1 }}>
-        <Button onClick={handleSubmit} color="primary" variant="outlined" fullWidth>
+        <Button
+          onClick={handleSubmit}
+          color="primary"
+          variant="outlined"
+          fullWidth>
           Save
         </Button>
         <Button
