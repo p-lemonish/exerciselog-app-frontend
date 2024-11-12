@@ -1,4 +1,4 @@
-export function handleApiError(err, logout, navigate) {
+export default function handleApiError(err, logout, navigate) {
   if (err.response) {
     const { status, data } = err.response;
 

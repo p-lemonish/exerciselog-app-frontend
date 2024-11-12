@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { AuthContext } from '../../context/AuthContext';
 import NumberInput from '../NumberInput';
-import { handleApiError } from '../ErrorHandler'
+import handleApiError from '../ErrorHandler'
 
 function AddPlannedExercise() {
   const { id } = useParams();

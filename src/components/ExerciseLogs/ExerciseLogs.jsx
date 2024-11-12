@@ -16,7 +16,7 @@ import LoadingScreen from '../LoadingScreen';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 import PageLayout from '../Layout/PageLayout';
-import { handleApiError } from '../ErrorHandler'
+import handleApiError from '../ErrorHandler'
 
 function ExerciseLogs() {
   const { logout } = useContext(AuthContext);

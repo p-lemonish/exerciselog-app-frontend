@@ -10,7 +10,7 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
-import { handleApiError } from '../ErrorHandler'
+import handleApiError from '../ErrorHandler'
 import { useNavigate } from 'react-router-dom';
 
 function Profile() {

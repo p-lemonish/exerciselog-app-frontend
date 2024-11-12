@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { handleApiError } from '../ErrorHandler'
+import handleApiError from '../ErrorHandler'
 import { useNavigate, Link } from 'react-router-dom';
 import { Alert, Button, Container, TextField, Typography } from '@mui/material';
 
