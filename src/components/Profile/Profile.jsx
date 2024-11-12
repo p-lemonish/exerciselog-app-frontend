@@ -10,6 +10,7 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
+import handleApiError from '../ErrorHandler'
 import { useNavigate } from 'react-router-dom';
 
 function Profile() {
@@ -26,9 +27,8 @@ function Profile() {
     newPassword: '',
     confirmNewPassword: '',
   });
-  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(true);
-  const [passwordError, setPasswordError] = useState('');
+  const [error, setError] = useState('');
   const [passwordSuccess, setPasswordSuccess] = useState('');
 
   const fetchUserProfile = async () => {
@@ -37,10 +37,8 @@ function Profile() {
       setUser(response.data);
     } catch (err) {
       console.error('Error fetching user profile:', err);
-      if (err.response && err.response.status === 401) {
-        logout();
-        navigate('/login');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     } finally {
       setLoading(false);
     }
@@ -56,11 +54,10 @@ function Profile() {
 
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
-    setPasswordError('');
+    setError('');
     setPasswordSuccess('');
     if (passwordData.newPassword !== passwordData.confirmNewPassword) {
-      setErrors({ confirmNewPassword: 'Passwords do not match' });
+      setError('Passwords do not match');
       return;
     }
     try {
@@ -73,15 +70,8 @@ function Profile() {
       });
     } catch (err) {
       console.error('Error changing password:', err);
-      if (err.response && err.response.data) {
-        const errorData = err.response.data;
-        const errorMessages = Object.entries(errorData).map(
-          ([field, message]) => `${message}`
-        );
-        setPasswordError(errorMessages);
-      } else {
-        setPasswordError('Error changing password');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
 
@@ -151,9 +141,9 @@ function Profile() {
             helperText={errors.confirmNewPassword}
             required
           />
-          {passwordError && (
+          {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
-              {passwordError}
+              {error}
             </Alert>
           )}
           {passwordSuccess && (

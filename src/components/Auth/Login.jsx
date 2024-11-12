@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import handleApiError from '../ErrorHandler'
 import { AuthContext } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Container, TextField, Typography } from '@mui/material';
@@ -29,7 +30,8 @@ function Login() {
       navigate('/planned-exercises');
     } catch (err) {
       console.log('Login error: ', err);
-      setError('Invalid username or password');
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
   return (

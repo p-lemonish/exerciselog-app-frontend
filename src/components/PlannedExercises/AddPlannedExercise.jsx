@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { AuthContext } from '../../context/AuthContext';
 import NumberInput from '../NumberInput';
+import handleApiError from '../ErrorHandler'
 
 function AddPlannedExercise() {
   const { id } = useParams();
@@ -61,6 +62,8 @@ function AddPlannedExercise() {
       });
     } catch (err) {
       console.error('Error fetching exercise', err);
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     } finally {
       setLoading(false);
     }
@@ -100,15 +103,8 @@ function AddPlannedExercise() {
       navigate('/planned-exercises');
     } catch (err) {
       console.log('Error while adding a planned exercise:', err);
-      if (err.response && err.response.data) {
-        const errorData = err.response.data;
-        const errorMessages = Object.entries(errorData).map(
-          ([field, message]) => `${message}`
-        );
-        setError(errorMessages);
-      } else {
-        setError('An error occurred while adding planned exercise');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
 

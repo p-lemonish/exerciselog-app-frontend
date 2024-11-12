@@ -4,12 +4,12 @@ import { AuthContext } from '../../context/AuthContext';
 import { styled } from '@mui/system';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
+import handleApiError from '../ErrorHandler'
 import NumberInput from '../NumberInput';
 import {
   Alert,
   Box,
   Button,
-  Container,
   List,
   ListItem,
   ListItemText,
@@ -63,18 +63,8 @@ function StartWorkout() {
       });
     } catch (err) {
       console.error('Error fetching workout', err);
-      if (err.response) {
-        if (err.response.status === 401) {
-          logout();
-          navigate('/login');
-        } else if (err.response.status === 404) {
-          setError('Workout not found');
-        } else {
-          setError('Failed to load workout data');
-        }
-      } else {
-        setError('Failed to load workout data');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     } finally {
       setLoading(false);
     }
@@ -118,6 +108,8 @@ function StartWorkout() {
       navigate('/workouts');
     } catch (err) {
       console.error('Error completing workout', err);
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
 

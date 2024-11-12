@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
+import handleApiError from '../ErrorHandler'
 import {
   Box,
   List,
@@ -75,16 +76,8 @@ function AddWorkout() {
       }
     } catch (err) {
       console.log('Error while adding a new workout:', err);
-      if (err.response && err.response.data) {
-        const errorData = err.response.data;
-        const errorMessages = Object.entries(errorData).map(
-          ([field, message]) => `${message}`
-        );
-        setSuccessMessage('');
-        setError(errorMessages);
-      } else {
-        setError('An error occurred while adding a new workout');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
 
@@ -106,18 +99,8 @@ function AddWorkout() {
       }
     } catch (err) {
       console.error('Error fetching data:', err);
-      if (err.response) {
-        if (err.response.status === 401) {
-          logout();
-          navigate('/login');
-        } else if (err.response.status === 404) {
-          setError('Workout not found');
-        } else {
-          setError('Failed to load data');
-        }
-      } else {
-        setError('An error occurred while fetching data');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     } finally {
       setLoading(false);
     }

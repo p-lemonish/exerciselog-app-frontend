@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import handleApiError from '../ErrorHandler'
 import { useNavigate, Link } from 'react-router-dom';
 import { Alert, Button, Container, TextField, Typography } from '@mui/material';
 
@@ -36,15 +37,8 @@ function Register() {
       navigate('/login');
     } catch (err) {
       console.log('Registration error:', err);
-      if (err.response && err.response.data) {
-        const errorData = err.response.data;
-        const errorMessages = Object.entries(errorData).map(
-          ([field, message]) => `${message}`
-        );
-        setError(errorMessages);
-      } else {
-        setError('An error occurred during registration');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
 

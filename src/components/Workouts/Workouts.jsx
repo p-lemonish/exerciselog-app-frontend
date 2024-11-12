@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Box,
-  Container,
   Typography,
   Button,
   Alert,
@@ -22,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
 import PageLayout from '../Layout/PageLayout';
+import handleApiError from '../ErrorHandler'
 
 function Workouts() {
   const [plannedWorkouts, setPlannedWorkouts] = useState([]);
@@ -45,13 +45,8 @@ function Workouts() {
       setError(null);
     } catch (err) {
       console.error('Error deleting planned workout', err);
-      if (err.response && err.response.data) {
-        const errorData = err.response.data;
-        const errorMessages = Object.entries(errorData).map(
-          ([field, message]) => `${message}`
-        );
-        setError(errorMessages);
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
   const handleStartWorkout = async (id) => {
@@ -71,12 +66,8 @@ function Workouts() {
       setWorkoutNames(uniqueNames);
     } catch (err) {
       console.error('Error fetching planned exercises', err);
-      if (err.response && err.response.status === 401) {
-        logout();
-        navigate('/login');
-      } else {
-        setError('Failed to load planned workouts');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     } finally {
       setLoading(false);
     }

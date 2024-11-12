@@ -3,6 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
 import PageLayout from '../Layout/PageLayout';
+import handleApiError from '../ErrorHandler'
 import { useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -45,13 +46,8 @@ function PlannedExerciseList() {
       setError(null);
     } catch (err) {
       console.error('Error deleting planned exercise', err);
-      if (err.response && err.response.data) {
-        const errorData = err.response.data;
-        const errorMessages = Object.entries(errorData).map(
-          ([field, message]) => `${message}`
-        );
-        setError(errorMessages);
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     }
   };
 
@@ -69,12 +65,8 @@ function PlannedExerciseList() {
       setPlannedExercises(response.data);
     } catch (err) {
       console.error('Error fetching planned exercises', err);
-      if (err.response && err.response.status === 401) {
-        logout();
-        navigate('/login');
-      } else {
-        setError('Failed to load planned exercises');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     } finally {
       setLoading(false);
     }

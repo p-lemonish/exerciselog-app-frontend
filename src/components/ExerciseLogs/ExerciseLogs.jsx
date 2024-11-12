@@ -2,10 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Autocomplete,
-  Box,
-  Button,
-  CircularProgress,
-  Container,
   Paper,
   Table,
   TableBody,
@@ -20,6 +16,7 @@ import LoadingScreen from '../LoadingScreen';
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 import PageLayout from '../Layout/PageLayout';
+import handleApiError from '../ErrorHandler'
 
 function ExerciseLogs() {
   const { logout } = useContext(AuthContext);
@@ -53,11 +50,8 @@ function ExerciseLogs() {
       setError('');
     } catch (err) {
       console.error('Error fetching exercise logs', err);
-      if (err.response && err.response.status === 401) {
-        logout();
-      } else {
-        setError('Failed to load exercise logs');
-      }
+      const errorMessage = handleApiError(err, logout, navigate)
+      setError(errorMessage)
     } finally {
       setLoading(false);
     }
