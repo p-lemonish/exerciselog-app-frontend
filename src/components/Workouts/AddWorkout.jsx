@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
-import handleApiError from '../ErrorHandler'
+import { handleApiError } from '../ErrorHandler'
 import {
   Box,
   List,

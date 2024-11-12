@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { styled } from '@mui/system';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
-import handleApiError from '../ErrorHandler'
+import { handleApiError } from '../ErrorHandler'
 import NumberInput from '../NumberInput';
 import {
   Alert,

@@ -10,7 +10,7 @@ import {
 import { AuthContext } from '../../context/AuthContext';
 import api from '../../services/api';
 import LoadingScreen from '../LoadingScreen';
-import handleApiError from '../ErrorHandler'
+import { handleApiError } from '../ErrorHandler'
 import { useNavigate } from 'react-router-dom';
 
 function Profile() {
@@ -113,8 +113,8 @@ function Profile() {
             onChange={handlePasswordChange}
             fullWidth
             margin="normal"
-            error={!!errors.currentPassword}
-            helperText={errors.currentPassword}
+            error={!!error.currentPassword}
+            helperText={error.currentPassword}
             required
           />
           <TextField
@@ -125,8 +125,8 @@ function Profile() {
             onChange={handlePasswordChange}
             fullWidth
             margin="normal"
-            error={!!errors.newPassword}
-            helperText={errors.newPassword}
+            error={!!error.newPassword}
+            helperText={error.newPassword}
             required
           />
           <TextField
@@ -137,8 +137,8 @@ function Profile() {
             onChange={handlePasswordChange}
             fullWidth
             margin="normal"
-            error={!!errors.confirmNewPassword}
-            helperText={errors.confirmNewPassword}
+            error={!!error.confirmNewPassword}
+            helperText={error.confirmNewPassword}
             required
           />
           {error && (
