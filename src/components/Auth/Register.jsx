@@ -13,6 +13,7 @@ function Register() {
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { authState, logout } = useContext(AuthContext);
 
   const { username, email, password, confirmPassword } = formData;
 
@@ -28,7 +29,8 @@ function Register() {
     }
 
     try {
-      await axios.post('http://localhost:8080/api/register', {
+      const baseURL = import.meta.env.VITE_API_BASE_URL
+      await axios.post(`${baseURL}/register`, {
         username,
         email,
         password,

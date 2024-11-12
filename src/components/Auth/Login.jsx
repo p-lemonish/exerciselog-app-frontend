@@ -7,6 +7,7 @@ import { Alert, Button, Container, TextField, Typography } from '@mui/material';
 
 function Login() {
   const navigate = useNavigate();
+  const { authState, logout } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -21,7 +22,8 @@ function Login() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/api/login', {
+      const baseURL = import.meta.env.VITE_API_BASE_URL
+      const response = await axios.post(`${baseURL}/login`, {
         username,
         password,
       });
