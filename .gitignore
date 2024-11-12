@@ -21,7 +21,8 @@
 
 .dockerignore
 nginx.conf
-dist
+*dist*
+.env*
 
 npm-debug.log*
 yarn-debug.log*
