@@ -23,7 +23,7 @@ import LoadingScreen from '../LoadingScreen';
 import PageLayout from '../Layout/PageLayout';
 import handleApiError from '../ErrorHandler'
 
-function Workouts() {
+function Workouts() { // TODO Let user change the order of their planned exercises in planned workout
   const [plannedWorkouts, setPlannedWorkouts] = useState([]);
   const [workoutNames, setWorkoutNames] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState('');
