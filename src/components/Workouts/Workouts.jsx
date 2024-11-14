@@ -23,7 +23,7 @@ import LoadingScreen from '../LoadingScreen';
 import PageLayout from '../Layout/PageLayout';
 import handleApiError from '../ErrorHandler'
 
-function Workouts() { // TODO Let user change the order of their planned exercises in planned workout
+function Workouts() { // TODO Let user change the order of their planned exercises in planned workout. TODO in exercise list, sort them by name so its easier to find a specific exercise and it's different "variations"
   const [plannedWorkouts, setPlannedWorkouts] = useState([]);
   const [workoutNames, setWorkoutNames] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState('');
