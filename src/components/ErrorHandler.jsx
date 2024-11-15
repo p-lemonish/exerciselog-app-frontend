@@ -11,7 +11,7 @@ export default function handleApiError(err, logout, navigate) {
         return 'Unauthorized access. Please log in again.';
       case 403:
         return 'You do not have permission to perform this action.';
-      case 404:
+      case 404: // TODO invalid username login attempt will put 404 not found
         return 'The requested resource was not found.';
       case 409:
         return 'A conflict occurred. Please check your input.';
