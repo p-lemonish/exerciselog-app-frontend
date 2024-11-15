@@ -2,7 +2,7 @@ export default function handleApiError(err, logout, navigate) {
   if (err.response) {
     const { status, data } = err.response;
 
-    switch (status) {
+    switch (status) { // TODO give a bit more meaningful error messages for the user
       case 400:
         return parseValidationErrors(data);
       case 401:
