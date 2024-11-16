@@ -5,7 +5,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, Container, TextField, Typography } from '@mui/material';
 
-function Login() {
+function Login() { // TODO put login form in the middle of the screen
   const navigate = useNavigate();
   const { authState, logout } = useContext(AuthContext);
   const [formData, setFormData] = useState({
