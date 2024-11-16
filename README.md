@@ -45,8 +45,8 @@ The ExerciseLog Frontend is a React application designed to complement the Exerc
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/p-lemonish/exerciselog-frontend.git
-   cd exerciselog-frontend
+   git clone https://github.com/p-lemonish/exerciselog-app-frontend.git
+   cd exerciselog-app-frontend
    ```
 
 2. **Install Dependencies**
@@ -123,13 +123,13 @@ Since the frontend is a static React application, it can be hosted on platforms 
 1. **Build Docker Image**
 
    ```bash
-   docker build -t exerciselog-frontend .
+   docker build -t exerciselog-app-frontend .
    ```
 
 2. **Run Docker Container**
 
    ```bash
-   docker run -p 80:80 exerciselog-frontend
+   docker run -p 80:80 exerciselog-app-frontend
    ```
 
    The application will be available at `http://localhost`.
