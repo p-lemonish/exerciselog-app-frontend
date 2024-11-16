@@ -45,7 +45,7 @@ The ExerciseLog Frontend is a React application designed to complement the Exerc
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/exerciselog-frontend.git
+   git clone https://github.com/p-lemonish/exerciselog-frontend.git
    cd exerciselog-frontend
    ```
 
